@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Transaction_Detail_Folder/transaction_detail_page.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class TransactionPage extends StatefulWidget {
@@ -23,99 +25,110 @@ class _TransactionPageState extends State<TransactionPage> {
       required String date,
       required String status,
     }) {
-      return Container(
-        margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withAlpha(95),
-              blurRadius: 10,
-              offset: const Offset(0, 0), // Shadow position
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              SolarIconsBold.billList,
-              size: 35,
-              color: green,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: urbanist.copyWith(
-                          fontWeight: semiBold,
-                        ),
-                      ),
-                      Text(
-                        invoice,
-                        style: urbanist.copyWith(
-                          fontWeight: light,
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                      Text(
-                        totalProduct,
-                        style: urbanist.copyWith(
-                          fontWeight: light,
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        date,
-                        style: urbanist.copyWith(
-                          fontWeight: light,
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              status.toLowerCase() == "proses" ? yellow : green,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          status,
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: const TransactionDetailPage(),
+                type: PageTransitionType.leftToRight,
+              ));
+        },
+        child: Container(
+          margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withAlpha(95),
+                blurRadius: 10,
+                offset: const Offset(0, 0), // Shadow position
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                SolarIconsBold.billList,
+                size: 35,
+                color: green,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
                           style: urbanist.copyWith(
                             fontWeight: semiBold,
-                            color: Colors.white,
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                        Text(
+                          invoice,
+                          style: urbanist.copyWith(
+                            fontWeight: light,
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          totalProduct,
+                          style: urbanist.copyWith(
+                            fontWeight: light,
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          date,
+                          style: urbanist.copyWith(
+                            fontWeight: light,
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: status.toLowerCase() == "proses"
+                                ? yellow
+                                : green,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            status,
+                            style: urbanist.copyWith(
+                              fontWeight: semiBold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }

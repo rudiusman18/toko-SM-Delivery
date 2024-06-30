@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
-import 'package:toko_sm_delivery/Pengiriman_Detail_Folder/delivery_detail_page.dart';
+import 'package:toko_sm_delivery/Delivery_Detail_Folder/delivery_detail_page.dart';
 import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:page_transition/page_transition.dart';
