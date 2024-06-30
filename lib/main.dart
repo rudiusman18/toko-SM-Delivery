@@ -12,14 +12,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.light(),
-      debugShowCheckedModeBanner: false,
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => BottomTabbarProvider()),
-        ],
-        child: const Scaffold(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => BottomTabbarProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData.light(),
+        debugShowCheckedModeBanner: false,
+        home: const Scaffold(
           body: BottomTabbar(),
         ),
       ),

@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Pengiriman_Detail_Folder/delivery_detail_page.dart';
+import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:toko_sm_delivery/bottom_tabbar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var filterSelectedIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
+    BottomTabbarProvider bottomTabbarProvider =
+        Provider.of<BottomTabbarProvider>(context);
+
     Widget header() {
       return Container(
         margin: const EdgeInsets.symmetric(
@@ -87,54 +102,97 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  color: green,
-                  child: Text(
-                    "Semua",
-                    style: urbanist.copyWith(
-                      fontWeight: semiBold,
-                      color: Colors.white,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      filterSelectedIndex = 0;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    color:
+                        filterSelectedIndex == 0 ? green : Colors.transparent,
+                    child: Text(
+                      "Semua",
+                      style: urbanist.copyWith(
+                        fontWeight: semiBold,
+                        color: filterSelectedIndex == 0
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                 ),
               ),
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  color: Colors.transparent,
-                  child: Text(
-                    "Bulan Ini",
-                    style: urbanist.copyWith(
-                      fontWeight: semiBold,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      filterSelectedIndex = 1;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    color:
+                        filterSelectedIndex == 1 ? green : Colors.transparent,
+                    child: Text(
+                      "Bulan Ini",
+                      style: urbanist.copyWith(
+                        fontWeight: semiBold,
+                        color: filterSelectedIndex == 1
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                 ),
               ),
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  color: Colors.transparent,
-                  child: Text(
-                    "Minggu Ini",
-                    style: urbanist.copyWith(
-                      fontWeight: semiBold,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      filterSelectedIndex = 2;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    color:
+                        filterSelectedIndex == 2 ? green : Colors.transparent,
+                    child: Text(
+                      "Minggu Ini",
+                      style: urbanist.copyWith(
+                        fontWeight: semiBold,
+                        color: filterSelectedIndex == 2
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                 ),
               ),
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  color: Colors.transparent,
-                  child: Text(
-                    "Hari Ini",
-                    style: urbanist.copyWith(
-                      fontWeight: semiBold,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      filterSelectedIndex = 3;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    color:
+                        filterSelectedIndex == 3 ? green : Colors.transparent,
+                    child: Text(
+                      "Hari Ini",
+                      style: urbanist.copyWith(
+                        fontWeight: semiBold,
+                        color: filterSelectedIndex == 3
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -352,60 +410,71 @@ class HomePage extends StatelessWidget {
       required String totalProduct,
       required String time,
     }) {
-      return Container(
-        margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withAlpha(95),
-              blurRadius: 10,
-              offset: const Offset(0, 0), // Shadow position
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              child: const DeliveryDetailPage(),
+              type: PageTransitionType.rightToLeft,
             ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Icon(
-              SolarIconsBold.delivery,
-              size: 35,
-              color: Colors.black,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  deliveryId,
-                  style: urbanist.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                Text(
-                  totalProduct,
-                  style: urbanist.copyWith(
-                    fontWeight: light,
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Text(
-              time,
-              style: urbanist.copyWith(
-                fontWeight: light,
-                fontSize: 12,
-                color: Colors.grey,
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withAlpha(95),
+                blurRadius: 10,
+                offset: const Offset(0, 0), // Shadow position
               ),
-            ),
-          ],
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                SolarIconsBold.delivery,
+                size: 35,
+                color: Colors.black,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    deliveryId,
+                    style: urbanist.copyWith(
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  Text(
+                    totalProduct,
+                    style: urbanist.copyWith(
+                      fontWeight: light,
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                time,
+                style: urbanist.copyWith(
+                  fontWeight: light,
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -451,11 +520,22 @@ class HomePage extends StatelessWidget {
                       fontWeight: semiBold,
                     ),
                   ),
-                  Text(
-                    "Lihat Semua",
-                    style: urbanist.copyWith(
-                      fontSize: 16,
-                      color: green,
+                  InkWell(
+                    onTap: () {
+                      bottomTabbarProvider.selectedIndex = 2;
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                            child: const BottomTabbar(),
+                            type: PageTransitionType.leftToRight,
+                          ));
+                    },
+                    child: Text(
+                      "Lihat Semua",
+                      style: urbanist.copyWith(
+                        fontSize: 16,
+                        color: green,
+                      ),
                     ),
                   ),
                 ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Pengiriman_Detail_Folder/delivery_detail_page.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class DeliveryPage extends StatefulWidget {
@@ -55,91 +57,103 @@ class _DeliveryPageState extends State<DeliveryPage> {
       required String date,
       required String status,
     }) {
-      return Container(
-        margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withAlpha(95),
-              blurRadius: 10,
-              offset: const Offset(0, 0), // Shadow position
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              child: const DeliveryDetailPage(),
+              type: PageTransitionType.rightToLeft,
             ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              SolarIconsBold.delivery,
-              size: 35,
-              color: green,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  deliveryId,
-                  style: urbanist.copyWith(
-                    fontWeight: semiBold,
-                  ),
-                ),
-                Text(
-                  totalProduct,
-                  style: urbanist.copyWith(
-                    fontWeight: light,
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Row(
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withAlpha(95),
+                blurRadius: 10,
+                offset: const Offset(0, 0), // Shadow position
+              ),
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                SolarIconsBold.delivery,
+                size: 35,
+                color: green,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        date,
-                        style: urbanist.copyWith(
-                          fontWeight: light,
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              status.toLowerCase() == "proses" ? yellow : green,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          status,
-                          style: urbanist.copyWith(
-                            fontWeight: semiBold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  Text(
+                    deliveryId,
+                    style: urbanist.copyWith(
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  Text(
+                    totalProduct,
+                    style: urbanist.copyWith(
+                      fontWeight: light,
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ],
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          date,
+                          style: urbanist.copyWith(
+                            fontWeight: light,
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: status.toLowerCase() == "proses"
+                                ? yellow
+                                : green,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            status,
+                            style: urbanist.copyWith(
+                              fontWeight: semiBold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
