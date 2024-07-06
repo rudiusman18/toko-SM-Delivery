@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:toko_sm_delivery/Delivery_Detail_Folder/delivery_detail_page.dart';
+import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
 import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
+import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:toko_sm_delivery/bottom_tabbar.dart';
@@ -18,9 +20,75 @@ class _HomePageState extends State<HomePage> {
   var filterSelectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+
+    _getTransactionHistoryByTime();
+  }
+
+  void _getTransactionHistoryByTime() async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+
+    var time = "all";
+    final shippingProvider =
+        Provider.of<ShippingProvider>(context, listen: false);
+
+    switch (filterSelectedIndex) {
+      case 0:
+        // do something
+        time = "day";
+        break;
+      case 1:
+        // do something else
+        time = "week";
+        break;
+      case 2:
+        // do something else
+        time = "month";
+        break;
+      case 3:
+        // do something else
+        time = "all";
+        break;
+      default:
+        time = "day";
+        break;
+    }
+
+    print("Melakukan load data dengan time : $time");
+
+    if (await shippingProvider.getStateDataByTime(time: time)) {
+      print(
+          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+    } else {
+      print("Data gagal");
+    }
+  }
+
+  void _getDeliveryHistory() async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+
+    final shippingProvider =
+        Provider.of<ShippingProvider>(context, listen: false);
+    if (await shippingProvider.getDeliveryData(
+        date: "", query: "", page: "1")) {
+      print(
+          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+    } else {
+      print("Data gagal");
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     BottomTabbarProvider bottomTabbarProvider =
         Provider.of<BottomTabbarProvider>(context);
+
+    ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
 
     Widget header() {
       return Container(
@@ -106,6 +174,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     setState(() {
                       filterSelectedIndex = 0;
+                      _getTransactionHistoryByTime();
                     });
                   },
                   child: Container(
@@ -129,6 +198,7 @@ class _HomePageState extends State<HomePage> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
+                      _getTransactionHistoryByTime();
                       filterSelectedIndex = 1;
                     });
                   },
@@ -153,6 +223,7 @@ class _HomePageState extends State<HomePage> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
+                      _getTransactionHistoryByTime();
                       filterSelectedIndex = 2;
                     });
                   },
@@ -177,6 +248,7 @@ class _HomePageState extends State<HomePage> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
+                      _getTransactionHistoryByTime();
                       filterSelectedIndex = 3;
                     });
                   },
@@ -496,10 +568,14 @@ class _HomePageState extends State<HomePage> {
               height: 20,
             ),
             report(
-              prosesPengirimanValue: "2",
-              prossesTransaksiValue: "6",
-              selesaPengirimanValue: "7",
-              selesaiTransaksiValue: "8",
+              prosesPengirimanValue:
+                  "${shippingProvider.shippingState?.data!.proses!.pengiriman ?? 0}",
+              prossesTransaksiValue:
+                  "${shippingProvider.shippingState?.data!.proses!.transaksi ?? 0}",
+              selesaPengirimanValue:
+                  "${shippingProvider.shippingState?.data!.selesai!.pengiriman ?? 0}",
+              selesaiTransaksiValue:
+                  "${shippingProvider.shippingState?.data!.selesai!.transaksi ?? 0}",
             ),
             const SizedBox(
               height: 20,
@@ -547,12 +623,14 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  for (var i = 0; i < 100; i++)
+                  for (DeliveryData i
+                      in shippingProvider.deliveryData?.data ?? []) ...[
                     deliveryItem(
-                      deliveryId: "12345678",
-                      totalProduct: "3 transaksi",
-                      time: "22:30 WIB",
+                      deliveryId: i.sId.toString(),
+                      totalProduct: "${i.jumlahTransaksi} transaksi",
+                      time: "${i.time} WIB",
                     ),
+                  ],
                 ],
               ),
             ),

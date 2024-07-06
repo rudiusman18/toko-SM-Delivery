@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
+import "package:toko_sm_delivery/Providers/shipping_state_provider.dart";
 import "package:toko_sm_delivery/login_page.dart";
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -10,6 +11,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (context) => BottomTabbarProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ShippingProvider(),
         ),
       ],
       child: MaterialApp(

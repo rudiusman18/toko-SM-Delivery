@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
+import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Transaction_Detail_Folder/transaction_detail_page.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +25,35 @@ class _TransactionPageState extends State<TransactionPage> {
   String _selectedDate = '';
 
   @override
+  void initState() {
+    super.initState();
+
+    _getTransactionHistory();
+  }
+
+  void _getTransactionHistory() async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+
+    final shippingProvider =
+        Provider.of<ShippingProvider>(context, listen: false);
+
+    print("Date selected ${_selectedDate}");
+
+    if (await shippingProvider.getTransactionData(
+        date: _selectedDate, query: searchTextFieldController.text)) {
+      print(
+          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+    } else {
+      print("Data gagal");
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+
     // ignore: no_leading_underscores_for_local_identifiers
     void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
       setState(() {
@@ -31,6 +62,8 @@ class _TransactionPageState extends State<TransactionPage> {
         // // Parse the string into a DateTime object
         // DateTime dateTime = dateFormat.parse(_selectedDate);
         _selectedDate = args.value.toString().split(" ").first;
+        _getTransactionHistory();
+        setState(() {});
       });
     }
 
@@ -223,7 +256,10 @@ class _TransactionPageState extends State<TransactionPage> {
                     controller: searchTextFieldController,
                     cursorColor: green,
                     focusNode: searchTextFieldFocusNode,
-                    onFieldSubmitted: (_) {},
+                    onFieldSubmitted: (_) {
+                      _getTransactionHistory();
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 20),
@@ -299,27 +335,16 @@ class _TransactionPageState extends State<TransactionPage> {
             Expanded(
                 child: ListView(
               children: [
-                transactionItem(
-                  name: "John Doe",
-                  invoice: "#INV2123345",
-                  totalProduct: "3 Produk",
-                  date: "26 Juni 2024",
-                  status: "Proses",
-                ),
-                transactionItem(
-                  name: "tom Jerry",
-                  invoice: "#INV2123345",
-                  totalProduct: "3 Produk",
-                  date: "26 Juni 2024",
-                  status: "Proses",
-                ),
-                transactionItem(
-                  name: "Isabella",
-                  invoice: "#INV2123345",
-                  totalProduct: "3 Produk",
-                  date: "26 Juni 2024",
-                  status: "Proses",
-                ),
+                for (TransactionData i
+                    in shippingProvider.transactionData?.data ?? []) ...[
+                  transactionItem(
+                    name: i.namaPelanggan.toString(),
+                    invoice: i.noInvoice.toString(),
+                    totalProduct: "- Transaksi",
+                    date: i.date.toString(),
+                    status: i.status.toString(),
+                  ),
+                ],
               ],
             )),
           ],
