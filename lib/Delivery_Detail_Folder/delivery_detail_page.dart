@@ -9,13 +9,82 @@ class DeliveryDetailPage extends StatefulWidget {
 }
 
 class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
-  var listTransactionStatus = [];
-  var listGolonganProduct = [];
+  List<ProductGolonganItem> listProductGolonganA = [];
+  List<ProductGolonganItem> listProductGolonganB = [];
+
   @override
   Widget build(BuildContext context) {
-    for (var i = 0; i < 2; i++) {
-      listTransactionStatus.add(0);
-      listGolonganProduct.add(true);
+    if (listProductGolonganA.isEmpty && listProductGolonganB.isEmpty) {
+      for (var i = 0; i < 5; i++) {
+        listProductGolonganA.add(
+          ProductGolonganItem(productName: "Produk A", totalProduct: "3"),
+        );
+      }
+
+      for (var i = 0; i < 2; i++) {
+        listProductGolonganB.add(
+          ProductGolonganItem(productName: "Produk B", totalProduct: "2"),
+        );
+      }
+    }
+
+    // ignore: no_leading_underscores_for_local_identifiers
+    _modalDialog({required String title, required String messages}) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              10,
+            ),
+          ),
+          title: Text(
+            title,
+            style: urbanist.copyWith(
+              fontWeight: bold,
+            ),
+          ),
+          content: RichText(
+            text: TextSpan(
+              text: messages.replaceFirst("Dikirim?", ""),
+              style: urbanist.copyWith(
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: messages.split(" ").last.split("?").first,
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                    fontWeight: bold,
+                  ),
+                ),
+                TextSpan(
+                  text: "?",
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+              ),
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Batal'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: green,
+              ),
+              onPressed: () {},
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
 
     Widget header() {
@@ -97,100 +166,6 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              // padding: const EdgeInsets.all(10),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            listTransactionStatus[index] = 0;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          color: listTransactionStatus[index] == 0
-                              ? green
-                              : Colors.transparent,
-                          child: Text(
-                            "Diproses",
-                            style: urbanist.copyWith(
-                              fontWeight: semiBold,
-                              color: listTransactionStatus[index] == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            listTransactionStatus[index] = 1;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          color: listTransactionStatus[index] == 1
-                              ? green
-                              : Colors.transparent,
-                          child: Text(
-                            "Dikirim",
-                            style: urbanist.copyWith(
-                              fontWeight: semiBold,
-                              color: listTransactionStatus[index] == 1
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            listTransactionStatus[index] = 2;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          color: listTransactionStatus[index] == 2
-                              ? green
-                              : Colors.transparent,
-                          child: Text(
-                            "Diterima",
-                            style: urbanist.copyWith(
-                              fontWeight: semiBold,
-                              color: listTransactionStatus[index] == 2
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       );
@@ -198,9 +173,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
 
     Widget golonganItem({
       required String golongan,
-      required String productName,
-      required String totalProduct,
-      required int index,
+      required List<ProductGolonganItem> product,
     }) {
       return Container(
         margin: const EdgeInsets.only(
@@ -220,78 +193,81 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                     fontWeight: semiBold,
                   ),
                 ),
-                index != 0
-                    ? const SizedBox()
-                    : Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: yellow,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          "2",
-                          style: urbanist.copyWith(
-                            fontWeight: semiBold,
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      productName,
-                      style: urbanist,
-                    ),
-                    Text(
-                      "$totalProduct Produk",
-                      style: urbanist,
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      listGolonganProduct[index] = !listGolonganProduct[index];
-                    });
-                  },
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: listGolonganProduct[index]
-                          ? green
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        width: 1,
-                        color: !listGolonganProduct[index]
-                            ? Colors.grey
-                            : Colors.transparent,
-                      ),
-                    ),
-                    child: const FittedBox(
-                      fit: BoxFit.cover,
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: yellow,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    "${product.length}",
+                    style: urbanist.copyWith(
+                      fontWeight: semiBold,
+                      color: Colors.white,
+                      fontSize: 18,
                     ),
                   ),
                 ),
               ],
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            for (var i = 0; i < (product.length); i++) ...{
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      product[i].productName,
+                      style: urbanist,
+                    ),
+                  ),
+                  Text(
+                    "${product[i].totalProduct} Pcs",
+                    style: urbanist,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        product[i].isChecked = !product[i].isChecked;
+                        print("isi produk nya adalah: ${product[i].isChecked}");
+                      });
+                    },
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color:
+                            product[i].isChecked ? green : Colors.transparent,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          width: 1,
+                          color: !product[i].isChecked
+                              ? Colors.grey
+                              : Colors.transparent,
+                        ),
+                      ),
+                      child: const FittedBox(
+                        fit: BoxFit.cover,
+                        child: Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            },
           ],
         ),
       );
@@ -325,7 +301,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "3",
+                    "2",
                     style: urbanist.copyWith(
                       fontWeight: semiBold,
                       color: Colors.white,
@@ -347,14 +323,14 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 index: i,
               ),
             },
-            for (var i = 0; i < 2; i++) ...{
-              golonganItem(
-                golongan: "Golongan A",
-                productName: "Produk A",
-                totalProduct: "3",
-                index: i,
-              ),
-            }
+            golonganItem(
+              golongan: "Golongan A",
+              product: listProductGolonganA,
+            ),
+            golonganItem(
+              golongan: "Golongan B",
+              product: listProductGolonganB,
+            ),
           ],
         ),
       );
@@ -385,7 +361,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       ),
                       onPressed: () {},
                       child: Text(
-                        "Selesai",
+                        "Simpan Checklist",
                         style: urbanist.copyWith(
                           color: green,
                           fontWeight: semiBold,
@@ -402,9 +378,16 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                         backgroundColor: green,
                         shadowColor: Colors.transparent,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        print("proses dikirim ditekan");
+                        _modalDialog(
+                          title: "Konfirmasi Status",
+                          messages:
+                              "Anda yakin ingin mengubah status menjadi Dikirim?",
+                        );
+                      },
                       child: Text(
-                        "Simpan",
+                        "Proses Untuk Dikirim",
                         style: urbanist.copyWith(
                           fontWeight: semiBold,
                         ),
@@ -422,4 +405,15 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       ),
     );
   }
+}
+
+class ProductGolonganItem {
+  String productName = "";
+  String totalProduct = "";
+  bool isChecked = false;
+  ProductGolonganItem({
+    this.productName = "",
+    this.totalProduct = "",
+    this.isChecked = false,
+  });
 }

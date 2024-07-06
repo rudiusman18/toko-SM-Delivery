@@ -1,10 +1,32 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
-import "package:toko_sm_delivery/bottom_tabbar.dart";
+import "package:toko_sm_delivery/login_page.dart";
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => BottomTabbarProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('id', 'ID'),
+        ],
+        theme: ThemeData.light(),
+        debugShowCheckedModeBanner: false,
+        home: const MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,19 +34,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => BottomTabbarProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        theme: ThemeData.light(),
-        debugShowCheckedModeBanner: false,
-        home: const Scaffold(
-          body: BottomTabbar(),
-        ),
-      ),
+    return const Scaffold(
+      body: LoginPage(),
     );
   }
 }

@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                     color:
                         filterSelectedIndex == 0 ? green : Colors.transparent,
                     child: Text(
-                      "Semua",
+                      "Hari Ini",
                       style: urbanist.copyWith(
                         fontWeight: semiBold,
                         color: filterSelectedIndex == 0
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                     color:
                         filterSelectedIndex == 1 ? green : Colors.transparent,
                     child: Text(
-                      "Bulan Ini",
+                      "Minggu Ini",
                       style: urbanist.copyWith(
                         fontWeight: semiBold,
                         color: filterSelectedIndex == 1
@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                     color:
                         filterSelectedIndex == 2 ? green : Colors.transparent,
                     child: Text(
-                      "Minggu Ini",
+                      "Bulan Ini",
                       style: urbanist.copyWith(
                         fontWeight: semiBold,
                         color: filterSelectedIndex == 2
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                     color:
                         filterSelectedIndex == 3 ? green : Colors.transparent,
                     child: Text(
-                      "Hari Ini",
+                      "Semua",
                       style: urbanist.copyWith(
                         fontWeight: semiBold,
                         color: filterSelectedIndex == 3

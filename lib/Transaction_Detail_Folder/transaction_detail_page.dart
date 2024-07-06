@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:solar_icons/solar_icons.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class TransactionDetailPage extends StatefulWidget {
@@ -16,6 +17,65 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
+    _modalDialog({required String title, required String messages}) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              10,
+            ),
+          ),
+          title: Text(
+            title,
+            style: urbanist.copyWith(
+              fontWeight: bold,
+            ),
+          ),
+          content: RichText(
+            text: TextSpan(
+              text: messages.replaceFirst("Diterima?", ""),
+              style: urbanist.copyWith(
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: messages.split(" ").last.split("?").first,
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                    fontWeight: bold,
+                  ),
+                ),
+                TextSpan(
+                  text: "?",
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+              ),
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Batal'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: green,
+              ),
+              onPressed: () {},
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget header() {
       return Container(
         color: Colors.white,
@@ -155,73 +215,68 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             const SizedBox(
               height: 10,
             ),
-            Text(
-              "Metode Pembayaran",
-              style: urbanist.copyWith(
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: double.infinity, // Set the desired width here
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-              ), // Optional padding for better appearance
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: Colors.grey.withAlpha(90),
-                    width: 1), // Optional border styling
-                borderRadius:
-                    BorderRadius.circular(5), // Optional border radius
-              ),
-              child: DropdownButton<String>(
-                value: selecteditem, // Current selected item
-                isExpanded:
-                    true, // Make the dropdown expand to the width of the container
-                hint: Text(
-                    'Select an item'), // Hint text when no item is selected
-                items: lsitSelectedItem.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: urbanist,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selecteditem = newValue ?? ""; // Update the selected item
-                  });
-                },
-                underline: SizedBox(), // Remove the default underline
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            // Text(
+            //   "Metode Pembayaran",
+            //   style: urbanist.copyWith(
+            //     color: Colors.grey,
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // Container(
+            //   width: double.infinity, // Set the desired width here
+            //   padding: const EdgeInsets.symmetric(
+            //     horizontal: 12,
+            //   ), // Optional padding for better appearance
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //         color: Colors.grey.withAlpha(90),
+            //         width: 1), // Optional border styling
+            //     borderRadius:
+            //         BorderRadius.circular(5), // Optional border radius
+            //   ),
+            //   child: DropdownButton<String>(
+            //     value: selecteditem, // Current selected item
+            //     isExpanded:
+            //         true, // Make the dropdown expand to the width of the container
+            //     hint: Text(
+            //         'Select an item'), // Hint text when no item is selected
+            //     items: lsitSelectedItem.map((String item) {
+            //       return DropdownMenuItem<String>(
+            //         value: item,
+            //         child: Text(
+            //           item,
+            //           style: urbanist,
+            //         ),
+            //       );
+            //     }).toList(),
+            //     onChanged: (String? newValue) {
+            //       setState(() {
+            //         selecteditem = newValue ?? ""; // Update the selected item
+            //       });
+            //     },
+            //     underline: SizedBox(), // Remove the default underline
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             Row(
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      side: BorderSide(
-                        color: green,
-                        width: 1,
-                      ), // Border color
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Retur",
-                      style: urbanist.copyWith(
-                        color: green,
-                        fontWeight: semiBold,
-                      ),
-                    ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    side: BorderSide(
+                      color: green,
+                      width: 1,
+                    ), // Border color
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                  ),
+                  onPressed: () {},
+                  child: Icon(
+                    SolarIconsBold.menuDots,
+                    color: green,
                   ),
                 ),
                 const SizedBox(
@@ -233,9 +288,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       backgroundColor: green,
                       shadowColor: Colors.transparent,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _modalDialog(
+                        title: "Konfirmasi Status",
+                        messages:
+                            "Anda yakin ingin mengubah status pesanan menjadi Diterima?",
+                      );
+                    },
                     child: Text(
-                      "Simpan",
+                      "Pesanan Diterima",
                       style: urbanist.copyWith(
                         fontWeight: semiBold,
                       ),
