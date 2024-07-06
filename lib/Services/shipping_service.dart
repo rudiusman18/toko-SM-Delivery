@@ -55,8 +55,10 @@ class ShippingService {
   Future<DeliveryDataModel> getDeliveryData(
       {required String query,
       required String page,
+      required String date,
       required String token}) async {
-    var url = Uri.parse("${baseURL}pengiriman/data?q=$query&limit=&page=$page");
+    var url = Uri.parse(
+        "${baseURL}pengiriman/data?q=$query&limit=&page=$page&tanggal=$date");
     var header = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json'
