@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Transaction_Detail_Folder/transaction_detail_page.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
@@ -39,10 +40,15 @@ class _TransactionPageState extends State<TransactionPage> {
     final shippingProvider =
         Provider.of<ShippingProvider>(context, listen: false);
 
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     print("Date selected ${_selectedDate}");
 
     if (await shippingProvider.getTransactionData(
-        date: _selectedDate, query: searchTextFieldController.text)) {
+      date: _selectedDate,
+      query: searchTextFieldController.text,
+      token: authProvider.user.token.toString(),
+    )) {
       print(
           "Get data success ${shippingProvider.shippingState?.data.toString()}");
     } else {
@@ -340,7 +346,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   transactionItem(
                     name: i.namaPelanggan.toString(),
                     invoice: i.noInvoice.toString(),
-                    totalProduct: "- Transaksi",
+                    totalProduct: "${i.jumlahProduk} Transaksi",
                     date: i.date.toString(),
                     status: i.status.toString(),
                   ),

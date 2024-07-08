@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:toko_sm_delivery/Delivery_Detail_Folder/delivery_detail_page.dart';
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
@@ -24,6 +25,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _getTransactionHistoryByTime();
+
+    _getDeliveryHistory();
   }
 
   void _getTransactionHistoryByTime() async {
@@ -34,6 +37,8 @@ class _HomePageState extends State<HomePage> {
     var time = "all";
     final shippingProvider =
         Provider.of<ShippingProvider>(context, listen: false);
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     switch (filterSelectedIndex) {
       case 0:
@@ -59,7 +64,8 @@ class _HomePageState extends State<HomePage> {
 
     print("Melakukan load data dengan time : $time");
 
-    if (await shippingProvider.getStateDataByTime(time: time)) {
+    if (await shippingProvider.getStateDataByTime(
+        time: time, token: authProvider.user.token.toString())) {
       print(
           "Get data success ${shippingProvider.shippingState?.data.toString()}");
     } else {
@@ -68,14 +74,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getDeliveryHistory() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
-
     final shippingProvider =
         Provider.of<ShippingProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     if (await shippingProvider.getDeliveryData(
-        date: "", query: "", page: "1")) {
+      date: "",
+      query: "",
+      page: "1",
+      token: authProvider.user.token.toString(),
+    )) {
       print(
           "Get data success ${shippingProvider.shippingState?.data.toString()}");
     } else {

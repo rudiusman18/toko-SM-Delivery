@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:toko_sm_delivery/bottom_tabbar.dart';
 
@@ -20,7 +23,76 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode passwordFocusNode = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    Future.delayed(const Duration(seconds: 1), () async {
+      var data = await authProvider.getLoginData();
+      if (context.mounted) {
+        if (data?.token != null) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              PageTransition(
+                child: const BottomTabbar(),
+                type: PageTransitionType.rightToLeft,
+              ),
+              (route) => false);
+        } else {}
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleSignIn() async {
+      // setState(() {
+      //   isLoading = true;
+      // });
+      if (await authProvider.kurirLogin(
+        email: emailTextController.text,
+        password: passwordTextController.text,
+      )) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var getData = prefs.getString("data");
+
+        if (context.mounted) {
+          // setState(() {
+          //   isLoading = false;
+          // });
+          Navigator.pushAndRemoveUntil(
+              context,
+              PageTransition(
+                child: const BottomTabbar(),
+                type: PageTransitionType.rightToLeft,
+              ),
+              (route) => false);
+        }
+      } else {
+        if (context.mounted) {
+          // setState(() {
+          //   isLoading = false;
+          // });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
+              ),
+              content: Text(
+                'Gagal Login!',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      }
+    }
+
     Widget loginForm() {
       return Container(
         margin: const EdgeInsets.symmetric(
@@ -148,13 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: green,
                 ),
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageTransition(
-                        child: const BottomTabbar(),
-                        type: PageTransitionType.rightToLeft,
-                      ),
-                      (route) => false);
+                  handleSignIn();
                 },
                 child: Text(
                   "Login",

@@ -5,6 +5,7 @@ import 'package:solar_icons/solar_icons.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:toko_sm_delivery/Delivery_Detail_Folder/delivery_detail_page.dart';
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:intl/intl.dart';
@@ -38,10 +39,15 @@ class _DeliveryPageState extends State<DeliveryPage> {
 
     final shippingProvider =
         Provider.of<ShippingProvider>(context, listen: false);
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     if (await shippingProvider.getDeliveryData(
-        date: _selectedDate,
-        query: searchTextFieldController.text,
-        page: "1")) {
+      date: _selectedDate,
+      query: searchTextFieldController.text,
+      page: "1",
+      token: authProvider.user.token.toString(),
+    )) {
       print(
           "Get data success ${shippingProvider.shippingState?.data.toString()}");
     } else {
