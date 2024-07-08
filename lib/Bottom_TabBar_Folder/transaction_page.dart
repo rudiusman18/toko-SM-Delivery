@@ -141,7 +141,9 @@ class _TransactionPageState extends State<TransactionPage> {
           Navigator.push(
               context,
               PageTransition(
-                child: const TransactionDetailPage(),
+                child: TransactionDetailPage(
+                  resiId: invoice,
+                ),
                 type: PageTransitionType.leftToRight,
               ));
         },

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
+import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
+import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
 import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
 
@@ -71,6 +73,49 @@ class ShippingService {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       var data = jsonDecode(response.body);
       DeliveryDataModel storeLocateModel = DeliveryDataModel.fromJson(data);
+      return storeLocateModel;
+    } else {
+      throw Exception("Gagal Mendapatkan Data Delivery");
+    }
+  }
+
+  Future<DetailDeliveryModel> getDetailDeliveryData(
+      {required String id, required String token}) async {
+    var url = Uri.parse("${baseURL}pengiriman/detail/${id}");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    var response = await http.get(url, headers: header);
+    // ignore: avoid_print
+    print("State Data By Time: ${url}");
+    print("State Data By Time: ${response.body}");
+    // **success melakukan login
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      DetailDeliveryModel storeLocateModel = DetailDeliveryModel.fromJson(data);
+      return storeLocateModel;
+    } else {
+      throw Exception("Gagal Mendapatkan Data Delivery");
+    }
+  }
+
+  Future<DetailTransactionModel> getDetailTransaction(
+      {required String id, required String token}) async {
+    var url = Uri.parse("${baseURL}transaksi/detail/$id");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    var response = await http.get(url, headers: header);
+    // ignore: avoid_print
+    print("State Data By Time: ${url}");
+    print("State Data By Time: ${response.body}");
+    // **success melakukan login
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      DetailTransactionModel storeLocateModel =
+          DetailTransactionModel.fromJson(data);
       return storeLocateModel;
     } else {
       throw Exception("Gagal Mendapatkan Data Delivery");

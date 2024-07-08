@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
+import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
+import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
 import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
 import 'package:toko_sm_delivery/Services/shipping_service.dart';
@@ -80,6 +82,54 @@ class ShippingProvider with ChangeNotifier {
       DeliveryDataModel data = await ShippingService()
           .getDeliveryData(query: query, page: page, date: date, token: token);
       deliveryData = data; // Set data
+      print("Store Location :  ${data.data.toString()}");
+      return true;
+    } catch (e) {
+      print("Error : $e");
+      return false;
+    }
+  }
+
+  // Delivery data Model
+  DetailDeliveryModel? _detailDeliveryData;
+
+  DetailDeliveryModel? get detailDeliveryData => _detailDeliveryData;
+
+  set detailDeliveryData(DetailDeliveryModel? deliveryData) {
+    _detailDeliveryData = deliveryData;
+    notifyListeners();
+  }
+
+  Future<bool> getDetailDeliveryData(
+      {required String id, required String token}) async {
+    try {
+      DetailDeliveryModel data =
+          await ShippingService().getDetailDeliveryData(id: id, token: token);
+      detailDeliveryData = data; // Set data
+      print("Store Location :  ${data.data.toString()}");
+      return true;
+    } catch (e) {
+      print("Error : $e");
+      return false;
+    }
+  }
+
+  // Delivery data Model
+  DetailTransactionModel? _detailTransactionData;
+
+  DetailTransactionModel? get detailTransactionData => _detailTransactionData;
+
+  set detailTransactionData(DetailTransactionModel? deliveryData) {
+    _detailTransactionData = deliveryData;
+    notifyListeners();
+  }
+
+  Future<bool> getDetailTransactionData(
+      {required String id, required String token}) async {
+    try {
+      DetailTransactionModel data =
+          await ShippingService().getDetailTransaction(id: id, token: token);
+      detailTransactionData = data; // Set data
       print("Store Location :  ${data.data.toString()}");
       return true;
     } catch (e) {

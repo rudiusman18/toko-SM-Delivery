@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<BottomTabbarProvider>(context);
 
     ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     Widget header() {
       return Container(
@@ -130,7 +131,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Lorem Dolor Sit Amet",
+                  authProvider.user.data.namaLengkap.toString(),
                   style: urbanist.copyWith(
                     fontSize: 16,
                     fontWeight: semiBold,
@@ -143,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                       size: 15,
                     ),
                     Text(
-                      "Cabang Krebet",
+                      "Cabang ${authProvider.user.data.namaCabang}",
                       style: urbanist.copyWith(
                         fontSize: 12,
                         fontWeight: light,
@@ -495,7 +496,9 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             PageTransition(
-              child: const DeliveryDetailPage(),
+              child: DeliveryDetailPage(
+                resiId: deliveryId,
+              ),
               type: PageTransitionType.rightToLeft,
             ),
           );
@@ -634,7 +637,7 @@ class _HomePageState extends State<HomePage> {
                   for (DeliveryData i
                       in shippingProvider.deliveryData?.data ?? []) ...[
                     deliveryItem(
-                      deliveryId: i.sId.toString(),
+                      deliveryId: i.noResi.toString(),
                       totalProduct: "${i.jumlahTransaksi} transaksi",
                       time: "${i.time} WIB",
                     ),

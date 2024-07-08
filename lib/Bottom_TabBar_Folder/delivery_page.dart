@@ -227,7 +227,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
           Navigator.push(
             context,
             PageTransition(
-              child: const DeliveryDetailPage(),
+              child: DeliveryDetailPage(
+                resiId: deliveryId,
+              ),
               type: PageTransitionType.rightToLeft,
             ),
           );
@@ -335,7 +337,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
                   for (DeliveryData i
                       in shippingProvider.deliveryData?.data ?? []) ...[
                     deliveryItem(
-                      deliveryId: i.sId.toString(),
+                      deliveryId: i.noResi.toString(),
                       totalProduct: "${i.jumlahTransaksi} Transaksi",
                       date: i.date.toString(),
                       status: i.status.toString(),

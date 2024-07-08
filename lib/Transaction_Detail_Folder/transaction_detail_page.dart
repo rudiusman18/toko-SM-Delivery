@@ -1,11 +1,15 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
+import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class TransactionDetailPage extends StatefulWidget {
-  const TransactionDetailPage({super.key});
+  final String resiId;
+  const TransactionDetailPage({super.key, required this.resiId});
 
   @override
   State<TransactionDetailPage> createState() => _TransactionDetailPageState();
@@ -16,7 +20,34 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   var selecteditem = "COD";
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("transact id : ${widget.resiId}");
+
+    _getDetailDelivery();
+  }
+
+  void _getDetailDelivery() async {
+    final shippingProvider =
+        Provider.of<ShippingProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (await shippingProvider.getDetailTransactionData(
+      id: widget.resiId,
+      token: authProvider.user.token.toString(),
+    )) {
+      print(
+          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+    } else {
+      print("Data gagal");
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+
     // ignore: no_leading_underscores_for_local_identifiers
     _modalDialog({required String title, required String messages}) {
       showDialog(
@@ -106,11 +137,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     }
 
     Widget productItem({
-      required String productName,
+      required String? productName,
       required String price,
-      required String totalProduct,
+      required List<int>? totalProduct,
+      required List<String?> multiSatuan,
     }) {
-      var listTotalProduct = totalProduct.split("/");
+      // var listTotalProduct = totalProduct.split("/");
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -118,7 +150,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             children: [
               Expanded(
                 child: Text(
-                  productName,
+                  productName.toString(),
                   style: urbanist,
                 ),
               ),
@@ -130,14 +162,26 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               ),
             ],
           ),
-          for (var i = 0; i < listTotalProduct.length; i++)
-            Text(
-              listTotalProduct[i],
-              style: urbanist.copyWith(
-                fontSize: 12,
-                color: Colors.grey,
+          if (multiSatuan.isNotEmpty && totalProduct!.isEmpty) ...[
+            for (var i = 0; i < multiSatuan.length; i++) ...[
+              Text(
+                "${totalProduct[i]} ${multiSatuan[i]}",
+                style: urbanist.copyWith(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
               ),
-            ),
+            ]
+          ],
+
+          // for (var i = 0; i < listTotalProduct.length; i++)
+          //   Text(
+          //     listTotalProduct[i],
+          //     style: urbanist.copyWith(
+          //       fontSize: 12,
+          //       color: Colors.grey,
+          //     ),
+          //   ),
         ],
       );
     }
@@ -170,7 +214,10 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "3",
+                    (shippingProvider
+                                .detailTransactionData?.data?.produk?.length ??
+                            0)
+                        .toString(),
                     style: urbanist.copyWith(
                       fontWeight: semiBold,
                       color: Colors.white,
@@ -183,18 +230,29 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             const SizedBox(
               height: 20,
             ),
-            for (var i = 0; i < 2; i++) ...{
+            for (var i = 0;
+                i <
+                    (shippingProvider.detailTransactionData?.data?.produk ?? [])
+                        .length;
+                i++) ...[
               productItem(
-                productName: "PlayStation 5",
-                price: "47000000",
-                totalProduct: "1 pak/1 pcs",
+                productName: shippingProvider
+                    .detailTransactionData?.data?.produk![i].namaProduk
+                    .toString(),
+                price:
+                    "${shippingProvider.detailTransactionData?.data?.produk![i].totalHarga.toString()}",
+                totalProduct: shippingProvider.detailTransactionData?.data
+                    ?.produk![i].jumlahMultisatuan, //1 pak/1 pcs
+                multiSatuan: shippingProvider.detailTransactionData?.data
+                        ?.produk![i].multisatuanUnit ??
+                    [],
               ),
               i == 1
                   ? const SizedBox()
                   : const Divider(
                       color: Colors.grey,
                     ),
-            }
+            ],
           ],
         ),
       );

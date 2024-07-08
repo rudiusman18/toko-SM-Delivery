@@ -50,6 +50,7 @@ class Data {
   int? status;
   String? createdAt;
   String? updatedAt;
+  String? namaCabang;
 
   Data({
     this.id,
@@ -71,6 +72,7 @@ class Data {
     this.status,
     this.createdAt,
     this.updatedAt,
+    this.namaCabang,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -93,6 +95,7 @@ class Data {
         status: json["status"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        namaCabang: json["nama_cabang"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -115,5 +118,6 @@ class Data {
         "status": status,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "nama_cabang": namaCabang
       };
 }

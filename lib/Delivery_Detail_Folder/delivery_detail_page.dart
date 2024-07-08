@@ -1,32 +1,82 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
+import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class DeliveryDetailPage extends StatefulWidget {
-  const DeliveryDetailPage({super.key});
+  final String resiId;
+  const DeliveryDetailPage({super.key, required this.resiId});
 
   @override
   State<DeliveryDetailPage> createState() => _DeliveryDetailPageState();
 }
 
 class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
-  List<ProductGolonganItem> listProductGolonganA = [];
-  List<ProductGolonganItem> listProductGolonganB = [];
+  List<ProductGolonganItem?> listProductGolonganA = [];
+  List<ProductGolonganItem?> listProductGolonganB = [];
+  List<ProductGolonganItem?> listProductGolonganC = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    print(widget.resiId);
+    _getDetailDelivery();
+  }
+
+  void _getDetailDelivery() async {
+    final shippingProvider =
+        Provider.of<ShippingProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (await shippingProvider.getDetailDeliveryData(
+      id: widget.resiId,
+      token: authProvider.user.token.toString(),
+    )) {
+      if (shippingProvider.detailDeliveryData?.data?.golongan?.a != null) {
+        for (var dataA
+            in shippingProvider.detailDeliveryData!.data!.golongan!.a!) {
+          listProductGolonganA.add(ProductGolonganItem(
+              isChecked: dataA.checked!,
+              productName: dataA.namaProduk.toString(),
+              totalProduct: dataA.jumlah.toString()));
+        }
+      }
+
+      if (shippingProvider.detailDeliveryData?.data?.golongan?.b != null) {
+        for (var dataA
+            in shippingProvider.detailDeliveryData!.data!.golongan!.b!) {
+          listProductGolonganB.add(ProductGolonganItem(
+              isChecked: dataA.checked!,
+              productName: dataA.namaProduk.toString(),
+              totalProduct: dataA.jumlah.toString()));
+        }
+      }
+
+      if (shippingProvider.detailDeliveryData?.data?.golongan?.c != null) {
+        for (var dataA
+            in shippingProvider.detailDeliveryData!.data!.golongan!.c!) {
+          listProductGolonganC.add(ProductGolonganItem(
+              isChecked: dataA.checked!,
+              productName: dataA.namaProduk.toString(),
+              totalProduct: dataA.jumlah.toString()));
+        }
+      }
+
+      print(
+          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+    } else {
+      print("Data gagal");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (listProductGolonganA.isEmpty && listProductGolonganB.isEmpty) {
-      for (var i = 0; i < 5; i++) {
-        listProductGolonganA.add(
-          ProductGolonganItem(productName: "Produk A", totalProduct: "3"),
-        );
-      }
-
-      for (var i = 0; i < 2; i++) {
-        listProductGolonganB.add(
-          ProductGolonganItem(productName: "Produk B", totalProduct: "2"),
-        );
-      }
-    }
+    ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
 
     // ignore: no_leading_underscores_for_local_identifiers
     _modalDialog({required String title, required String messages}) {
@@ -173,7 +223,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
 
     Widget golonganItem({
       required String golongan,
-      required List<ProductGolonganItem> product,
+      required List<ProductGolonganItem?> product,
     }) {
       return Container(
         margin: const EdgeInsets.only(
@@ -221,12 +271,12 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      product[i].productName,
+                      product[i]!.productName,
                       style: urbanist,
                     ),
                   ),
                   Text(
-                    "${product[i].totalProduct} Pcs",
+                    "${product[i]!.totalProduct} Pcs",
                     style: urbanist,
                   ),
                   const SizedBox(
@@ -235,8 +285,9 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        product[i].isChecked = !product[i].isChecked;
-                        print("isi produk nya adalah: ${product[i].isChecked}");
+                        product[i]?.isChecked = !product[i]!.isChecked;
+                        print(
+                            "isi produk nya adalah: ${product[i]!.isChecked}");
                       });
                     },
                     child: Container(
@@ -244,11 +295,11 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       height: 20,
                       decoration: BoxDecoration(
                         color:
-                            product[i].isChecked ? green : Colors.transparent,
+                            product[i]!.isChecked ? green : Colors.transparent,
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(
                           width: 1,
-                          color: !product[i].isChecked
+                          color: !product[i]!.isChecked
                               ? Colors.grey
                               : Colors.transparent,
                         ),
@@ -301,7 +352,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "2",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi!.length.toString()}",
                     style: urbanist.copyWith(
                       fontWeight: semiBold,
                       color: Colors.white,
@@ -314,23 +365,42 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
             const SizedBox(
               height: 20,
             ),
-            for (var i = 0; i < 2; i++) ...{
+            for (var i = 0;
+                i <
+                    (shippingProvider.detailDeliveryData?.data?.transaksi! ??
+                            [])
+                        .length;
+                i++) ...[
               transactionItem(
-                transactionName: "Lorem Ipsum",
-                date: "30 Jun 2024",
-                invoiceNumber: "#INV12312312",
-                totalProduct: "3",
+                transactionName:
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
+                date:
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
+                invoiceNumber:
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
+                totalProduct:
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].jumlahProduk}",
                 index: i,
               ),
-            },
-            golonganItem(
-              golongan: "Golongan A",
-              product: listProductGolonganA,
-            ),
-            golonganItem(
-              golongan: "Golongan B",
-              product: listProductGolonganB,
-            ),
+            ],
+            if (listProductGolonganA.isNotEmpty) ...[
+              golonganItem(
+                golongan: "Golongan A",
+                product: listProductGolonganA,
+              ),
+            ],
+            if (listProductGolonganB.isNotEmpty) ...[
+              golonganItem(
+                golongan: "Golongan B",
+                product: listProductGolonganB,
+              ),
+            ],
+            if (listProductGolonganC.isNotEmpty) ...[
+              golonganItem(
+                golongan: "Golongan C",
+                product: listProductGolonganC,
+              ),
+            ],
           ],
         ),
       );
