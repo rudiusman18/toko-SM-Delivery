@@ -137,6 +137,8 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       );
     }
 
+    _showBottomDialog() {}
+
     Widget header() {
       return Container(
         color: Colors.white,

@@ -39,8 +39,8 @@ dependencies:
   http: ^1.1.0
   solar_icons: ^0.0.5
   page_transition: ^2.1.0
-  syncfusion_flutter_sliders: 25.2.4
-  syncfusion_flutter_datepicker: 25.2.4
+  syncfusion_flutter_sliders: 23.1.40
+  syncfusion_flutter_datepicker: 23.1.40
   flutter_localization: ^0.2.0
   flutter_localizations:
     sdk: flutter
