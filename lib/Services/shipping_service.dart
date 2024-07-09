@@ -4,6 +4,7 @@ import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
 import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
 import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
 import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
+import 'package:toko_sm_delivery/Models/success_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
 
 class ShippingService {
@@ -119,6 +120,52 @@ class ShippingService {
       return storeLocateModel;
     } else {
       throw Exception("Gagal Mendapatkan Data Delivery");
+    }
+  }
+
+  Future<SuccessModel> postTransactionData(
+      {required Map<String, dynamic> data, required String token}) async {
+    var url = Uri.parse("${baseURL}transaksi/status");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    // ignore: avoid_print
+    print("State Data By Time: ${body}");
+    print("State Data By Time: ${url}");
+    print("State Data By Time: ${response.body}");
+    // **success melakukan login
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      SuccessModel storeLocateModel = SuccessModel.fromJson(data);
+      return storeLocateModel;
+    } else {
+      throw Exception("Gagal Memperbarui data");
+    }
+  }
+
+  Future<SuccessModel> postPaymentData(
+      {required Map<String, dynamic> data, required String token}) async {
+    var url = Uri.parse("${baseURL}transaksi/metodepembayaran");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    // ignore: avoid_print
+    print("State Data By Time: ${body}");
+    print("State Data By Time: ${url}");
+    print("State Data By Time: ${response.body}");
+    // **success melakukan login
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      SuccessModel storeLocateModel = SuccessModel.fromJson(data);
+      return storeLocateModel;
+    } else {
+      throw Exception("Gagal Memperbarui data");
     }
   }
 }

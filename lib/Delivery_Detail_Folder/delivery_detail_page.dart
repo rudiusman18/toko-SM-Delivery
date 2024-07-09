@@ -375,9 +375,9 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 i++) ...[
               transactionItem(
                 transactionName:
-                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].namaPelanggan}",
                 date:
-                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].date}",
                 invoiceNumber:
                     "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
                 totalProduct:

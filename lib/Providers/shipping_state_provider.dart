@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
 import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
 import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
 import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
+import 'package:toko_sm_delivery/Models/success_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
 import 'package:toko_sm_delivery/Services/shipping_service.dart';
 
@@ -131,6 +133,52 @@ class ShippingProvider with ChangeNotifier {
           await ShippingService().getDetailTransaction(id: id, token: token);
       detailTransactionData = data; // Set data
       print("Store Location :  ${data.data.toString()}");
+      return true;
+    } catch (e) {
+      print("Error : $e");
+      return false;
+    }
+  }
+
+  // Delivery data Model
+  SuccessModel? _postTransaction;
+
+  SuccessModel? get postTransaction => _postTransaction;
+
+  set postTransaction(SuccessModel? deliveryData) {
+    _postTransaction = deliveryData;
+    notifyListeners();
+  }
+
+  Future<bool> postTransactionData(
+      {required Map<String, dynamic> data, required String token}) async {
+    try {
+      SuccessModel datas =
+          await ShippingService().postTransactionData(data: data, token: token);
+      postTransaction = datas; // Set data
+      return true;
+    } catch (e) {
+      print("Error : $e");
+      return false;
+    }
+  }
+
+  // Delivery data Model
+  SuccessModel? _postPayment;
+
+  SuccessModel? get postPayment => _postPayment;
+
+  set postPayment(SuccessModel? deliveryData) {
+    _postPayment = deliveryData;
+    notifyListeners();
+  }
+
+  Future<bool> postPaymentData(
+      {required Map<String, dynamic> data, required String token}) async {
+    try {
+      SuccessModel datas =
+          await ShippingService().postPaymentData(data: data, token: token);
+      postTransaction = datas; // Set data
       return true;
     } catch (e) {
       print("Error : $e");

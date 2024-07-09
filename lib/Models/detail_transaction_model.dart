@@ -137,7 +137,7 @@ class Produk {
   String? imageUrl;
   int? harga;
   int? jumlah;
-  List<int>? jumlahMultisatuan;
+  List<dynamic>? jumlahMultisatuan;
   List<int>? multisatuanJumlah;
   List<String>? multisatuanUnit;
   int? totalHarga;
@@ -169,7 +169,7 @@ class Produk {
     imageUrl = json['image_url'];
     harga = json['harga'];
     jumlah = json['jumlah'];
-    jumlahMultisatuan = json['jumlah_multisatuan'].cast<int>();
+    jumlahMultisatuan = json['jumlah_multisatuan'];
     multisatuanJumlah = json['multisatuan_jumlah'].cast<int>();
     multisatuanUnit = json['multisatuan_unit'].cast<String>();
     totalHarga = json['total_harga'];
