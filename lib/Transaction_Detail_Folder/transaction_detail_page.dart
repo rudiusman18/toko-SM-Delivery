@@ -269,7 +269,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                     token:
                                         authProvider.user.token.toString())) {
                                   Navigator.pop(context);
-                                  Navigator.pop(context);
                                   print("Post data success");
                                 } else {
                                   Navigator.pop(context);
