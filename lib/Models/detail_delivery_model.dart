@@ -23,7 +23,7 @@ class DetailDeliveryModel {
 class DeliveryData {
   String? noResi;
   List<Transaksi>? transaksi;
-  Golongan? golongan;
+  dynamic golongan;
 
   DeliveryData({this.noResi, this.transaksi, this.golongan});
 
@@ -35,9 +35,7 @@ class DeliveryData {
         transaksi!.add(new Transaksi.fromJson(v));
       });
     }
-    golongan = json['golongan'] != null
-        ? new Golongan.fromJson(json['golongan'])
-        : null;
+    golongan = json['golongan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -90,71 +88,6 @@ class Transaksi {
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['date'] = this.date;
-    return data;
-  }
-}
-
-class Golongan {
-  List<A>? a;
-  List<A>? b;
-  List<A>? c;
-
-  Golongan({this.a, this.b, this.c});
-
-  Golongan.fromJson(Map<String, dynamic> json) {
-    if (json['A'] != null) {
-      a = <A>[];
-      json['A'].forEach((v) {
-        a!.add(new A.fromJson(v));
-      });
-    }
-    if (json['B'] != null) {
-      b = <A>[];
-      json['B'].forEach((v) {
-        b!.add(new A.fromJson(v));
-      });
-    }
-    if (json['C'] != null) {
-      b = <A>[];
-      json['B'].forEach((v) {
-        b!.add(new A.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.a != null) {
-      data['A'] = this.a!.map((v) => v.toJson()).toList();
-    }
-    if (this.b != null) {
-      data['B'] = this.b!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class A {
-  String? namaProduk;
-  String? satuan;
-  int? jumlah;
-  bool? checked;
-
-  A({this.namaProduk, this.satuan, this.jumlah, this.checked});
-
-  A.fromJson(Map<String, dynamic> json) {
-    namaProduk = json['nama_produk'];
-    satuan = json['satuan'];
-    jumlah = json['jumlah'];
-    checked = json['checked'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nama_produk'] = this.namaProduk;
-    data['satuan'] = this.satuan;
-    data['jumlah'] = this.jumlah;
-    data['checked'] = this.checked;
     return data;
   }
 }

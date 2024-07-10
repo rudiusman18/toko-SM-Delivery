@@ -15,10 +15,6 @@ class DeliveryDetailPage extends StatefulWidget {
 }
 
 class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
-  List<ProductGolonganItem?> listProductGolonganA = [];
-  List<ProductGolonganItem?> listProductGolonganB = [];
-  List<ProductGolonganItem?> listProductGolonganC = [];
-
   @override
   void initState() {
     // TODO: implement initState
@@ -37,38 +33,27 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       id: widget.resiId,
       token: authProvider.user.token.toString(),
     )) {
-      if (shippingProvider.detailDeliveryData?.data?.golongan?.a != null) {
-        for (var dataA
-            in shippingProvider.detailDeliveryData!.data!.golongan!.a!) {
-          listProductGolonganA.add(ProductGolonganItem(
-              isChecked: dataA.checked!,
-              productName: dataA.namaProduk.toString(),
-              totalProduct: dataA.jumlah.toString()));
-        }
-      }
-
-      if (shippingProvider.detailDeliveryData?.data?.golongan?.b != null) {
-        for (var dataA
-            in shippingProvider.detailDeliveryData!.data!.golongan!.b!) {
-          listProductGolonganB.add(ProductGolonganItem(
-              isChecked: dataA.checked!,
-              productName: dataA.namaProduk.toString(),
-              totalProduct: dataA.jumlah.toString()));
-        }
-      }
-
-      if (shippingProvider.detailDeliveryData?.data?.golongan?.c != null) {
-        for (var dataA
-            in shippingProvider.detailDeliveryData!.data!.golongan!.c!) {
-          listProductGolonganC.add(ProductGolonganItem(
-              isChecked: dataA.checked!,
-              productName: dataA.namaProduk.toString(),
-              totalProduct: dataA.jumlah.toString()));
-        }
-      }
-
       print(
-          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+          "Get data success ${shippingProvider.detailDeliveryData!.data?.golongan.toString()}");
+
+      // Access the "golongan" key
+      Map<String, dynamic> golongan =
+          shippingProvider.detailDeliveryData!.data?.golongan;
+
+      // Print the keys and values of "golongan"
+      golongan.forEach((String key, dynamic value) {
+        print('Key: $key, Value: $value');
+
+        // Access the "golongan" key
+        List<dynamic> list_data = value;
+
+        print("count : ${list_data.length}");
+        // list_data.forEach((String key, dynamic value){
+
+        // });
+
+        print(list_data.first.toString());
+      });
     } else {
       print("Data gagal");
     }
@@ -383,24 +368,6 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 totalProduct:
                     "${shippingProvider.detailDeliveryData?.data?.transaksi![i].jumlahProduk}",
                 index: i,
-              ),
-            ],
-            if (listProductGolonganA.isNotEmpty) ...[
-              golonganItem(
-                golongan: "Golongan A",
-                product: listProductGolonganA,
-              ),
-            ],
-            if (listProductGolonganB.isNotEmpty) ...[
-              golonganItem(
-                golongan: "Golongan B",
-                product: listProductGolonganB,
-              ),
-            ],
-            if (listProductGolonganC.isNotEmpty) ...[
-              golonganItem(
-                golongan: "Golongan C",
-                product: listProductGolonganC,
               ),
             ],
           ],
