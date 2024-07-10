@@ -49,6 +49,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   @override
   Widget build(BuildContext context) {
     ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     // ignore: no_leading_underscores_for_local_identifiers
     _modalDialog({required String title, required String messages}) {
@@ -101,7 +102,18 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: green,
               ),
-              onPressed: () {},
+              onPressed: () async {
+                var data = {"no_invoice": widget.resiId, "status": 3};
+                if (await shippingProvider.postTransactionData(
+                    data: data, token: authProvider.user.token.toString())) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  print("Post data success");
+                } else {
+                  Navigator.pop(context);
+                  print("Data gagal");
+                }
+              },
               child: const Text('OK'),
             ),
           ],
@@ -176,6 +188,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   ),
                   InkWell(
                     onTap: () {
+                      Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
@@ -245,7 +258,24 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: green,
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+                                var data = {
+                                  "no_invoice": widget.resiId,
+                                  "metode_pembayaran":
+                                      selecteditem.toLowerCase()
+                                };
+                                if (await shippingProvider.postPaymentData(
+                                    data: data,
+                                    token:
+                                        authProvider.user.token.toString())) {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  print("Post data success");
+                                } else {
+                                  Navigator.pop(context);
+                                  print("Data gagal");
+                                }
+                              },
                               child: const Text('OK'),
                             ),
                           ],
@@ -299,7 +329,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     Widget productItem({
       required String? productName,
       required String price,
-      required List<int>? totalProduct,
+      required List<dynamic>? totalProduct,
       required List<String?> multiSatuan,
     }) {
       // var listTotalProduct = totalProduct.split("/");
@@ -322,7 +352,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               ),
             ],
           ),
-          if (multiSatuan.isNotEmpty && totalProduct!.isEmpty) ...[
+          if (multiSatuan.isNotEmpty && totalProduct!.isNotEmpty) ...[
             for (var i = 0; i < multiSatuan.length; i++) ...[
               Text(
                 "${totalProduct[i]} ${multiSatuan[i]}",
@@ -333,20 +363,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               ),
             ]
           ],
-
-          // for (var i = 0; i < listTotalProduct.length; i++)
-          //   Text(
-          //     listTotalProduct[i],
-          //     style: urbanist.copyWith(
-          //       fontSize: 12,
-          //       color: Colors.grey,
-          //     ),
-          //   ),
         ],
       );
     }
 
     Widget content() {
+      print(
+          "Content Length : ${(shippingProvider.detailTransactionData?.data?.produk ?? []).length}");
       return Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
@@ -401,11 +424,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     .toString(),
                 price:
                     "${shippingProvider.detailTransactionData?.data?.produk![i].totalHarga.toString()}",
-                totalProduct: (shippingProvider.detailTransactionData?.data
-                            ?.produk![i].jumlahMultisatuan ??
-                        [])
-                    .map((e) => int.parse(e == null ? "0" : "$e"))
-                    .toList(), //1 pak/1 pcs
+                totalProduct: shippingProvider
+                    .detailTransactionData?.data?.produk![i].jumlahMultisatuan,
                 multiSatuan: shippingProvider.detailTransactionData?.data
                         ?.produk![i].multisatuanUnit ??
                     [],
@@ -526,7 +546,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 ),
               ],
             ),
-
             const SizedBox(
               height: 20,
             ),
