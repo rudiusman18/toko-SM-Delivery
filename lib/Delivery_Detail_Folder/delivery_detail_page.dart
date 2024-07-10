@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
 import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
@@ -36,24 +37,10 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       print(
           "Get data success ${shippingProvider.detailDeliveryData!.data?.golongan.toString()}");
 
-      // Access the "golongan" key
-      Map<String, dynamic> golongan =
-          shippingProvider.detailDeliveryData!.data?.golongan;
-
-      // Print the keys and values of "golongan"
-      golongan.forEach((String key, dynamic value) {
-        print('Key: $key, Value: $value');
-
-        // Access the "golongan" key
-        List<dynamic> list_data = value;
-
-        print("count : ${list_data.length}");
-        // list_data.forEach((String key, dynamic value){
-
-        // });
-
-        print(list_data.first.toString());
-      });
+      for (var data in shippingProvider.detailDeliveryData!.data!.golongan!) {
+        print("Golongan : ${data.label}");
+        print("Golongan : ${data.data}");
+      }
     } else {
       print("Data gagal");
     }
@@ -210,7 +197,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
 
     Widget golonganItem({
       required String golongan,
-      required List<ProductGolonganItem?> product,
+      required List<GolData>? product,
     }) {
       return Container(
         margin: const EdgeInsets.only(
@@ -240,7 +227,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "${product.length}",
+                    "${product?.length}",
                     style: urbanist.copyWith(
                       fontWeight: semiBold,
                       color: Colors.white,
@@ -253,17 +240,17 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
             const SizedBox(
               height: 10,
             ),
-            for (var i = 0; i < (product.length); i++) ...{
+            for (var i = 0; i < (product?.length ?? 0); i++) ...{
               Row(
                 children: [
                   Expanded(
                     child: Text(
-                      product[i]!.productName,
+                      "${product?[i].namaProduk}",
                       style: urbanist,
                     ),
                   ),
                   Text(
-                    "${product[i]!.totalProduct} Pcs",
+                    "${product?[i].jumlah} Pcs",
                     style: urbanist,
                   ),
                   const SizedBox(
@@ -272,9 +259,9 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        product[i]?.isChecked = !product[i]!.isChecked;
-                        print(
-                            "isi produk nya adalah: ${product[i]!.isChecked}");
+                        product[i].checked = !product[i].checked!;
+                        print("isi produk nya adalah: ${product[i].checked}");
+                        print("isi produk nya adalah: ${product[i].toJson()}");
                       });
                     },
                     child: Container(
@@ -282,11 +269,11 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       height: 20,
                       decoration: BoxDecoration(
                         color:
-                            product[i]!.isChecked ? green : Colors.transparent,
+                            product![i].checked! ? green : Colors.transparent,
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(
                           width: 1,
-                          color: !product[i]!.isChecked
+                          color: !product[i].checked!
                               ? Colors.grey
                               : Colors.transparent,
                         ),
@@ -368,6 +355,13 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 totalProduct:
                     "${shippingProvider.detailDeliveryData?.data?.transaksi![i].jumlahProduk}",
                 index: i,
+              ),
+            ],
+            for (var data
+                in shippingProvider.detailDeliveryData!.data!.golongan!) ...[
+              golonganItem(
+                golongan: "${data.label}",
+                product: data.data,
               ),
             ],
           ],
