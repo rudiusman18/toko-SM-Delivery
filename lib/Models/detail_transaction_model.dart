@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_collection_literals
+
 class DetailTransactionModel {
   String? message;
   Data? data;
@@ -6,12 +8,12 @@ class DetailTransactionModel {
 
   DetailTransactionModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -92,36 +94,36 @@ class Data {
     if (json['produk'] != null) {
       produk = <Produk>[];
       json['produk'].forEach((v) {
-        produk!.add(new Produk.fromJson(v));
+        produk!.add(Produk.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['no_invoice'] = this.noInvoice;
-    data['pelanggan_id'] = this.pelangganId;
-    data['nama_pelanggan'] = this.namaPelanggan;
-    data['cabang_id'] = this.cabangId;
-    data['kurir_id'] = this.kurirId;
-    data['pengiriman_id'] = this.pengirimanId;
-    data['nama_kurir'] = this.namaKurir;
-    data['total_harga'] = this.totalHarga;
-    data['total_ongkos_kirim'] = this.totalOngkosKirim;
-    data['total_belanja'] = this.totalBelanja;
-    data['metode_pembayaran'] = this.metodePembayaran;
-    data['nama_penerima'] = this.namaPenerima;
-    data['alamat_penerima'] = this.alamatPenerima;
-    data['bank_transfer'] = this.bankTransfer;
-    data['norekening_transfer'] = this.norekeningTransfer;
-    data['jumlah_produk'] = this.jumlahProduk;
-    data['status'] = this.status;
-    data['keterangan_status'] = this.keteranganStatus;
-    data['online'] = this.online;
-    data['created_at'] = this.createdAt;
-    if (this.produk != null) {
-      data['produk'] = this.produk!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['no_invoice'] = noInvoice;
+    data['pelanggan_id'] = pelangganId;
+    data['nama_pelanggan'] = namaPelanggan;
+    data['cabang_id'] = cabangId;
+    data['kurir_id'] = kurirId;
+    data['pengiriman_id'] = pengirimanId;
+    data['nama_kurir'] = namaKurir;
+    data['total_harga'] = totalHarga;
+    data['total_ongkos_kirim'] = totalOngkosKirim;
+    data['total_belanja'] = totalBelanja;
+    data['metode_pembayaran'] = metodePembayaran;
+    data['nama_penerima'] = namaPenerima;
+    data['alamat_penerima'] = alamatPenerima;
+    data['bank_transfer'] = bankTransfer;
+    data['norekening_transfer'] = norekeningTransfer;
+    data['jumlah_produk'] = jumlahProduk;
+    data['status'] = status;
+    data['keterangan_status'] = keteranganStatus;
+    data['online'] = online;
+    data['created_at'] = createdAt;
+    if (produk != null) {
+      data['produk'] = produk!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -133,31 +135,34 @@ class Produk {
   int? produkId;
   int? cabangId;
   String? namaProduk;
-  // dynamic golonganProduk;
+  dynamic golonganProduk;
   String? imageUrl;
   int? harga;
   int? jumlah;
+  String? satuanProduk;
   List<dynamic>? jumlahMultisatuan;
   List<dynamic>? multisatuanJumlah;
   List<dynamic>? multisatuanUnit;
   int? totalHarga;
   String? createdAt;
 
-  Produk(
-      {this.sId,
-      this.noInvoice,
-      this.produkId,
-      this.cabangId,
-      this.namaProduk,
-      // this.golonganProduk,
-      this.imageUrl,
-      this.harga,
-      this.jumlah,
-      this.jumlahMultisatuan,
-      this.multisatuanJumlah,
-      this.multisatuanUnit,
-      this.totalHarga,
-      this.createdAt});
+  Produk({
+    this.sId,
+    this.noInvoice,
+    this.produkId,
+    this.cabangId,
+    this.namaProduk,
+    this.golonganProduk,
+    this.imageUrl,
+    this.harga,
+    this.jumlah,
+    this.satuanProduk,
+    this.jumlahMultisatuan,
+    this.multisatuanJumlah,
+    this.multisatuanUnit,
+    this.totalHarga,
+    this.createdAt,
+  });
 
   Produk.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -165,10 +170,11 @@ class Produk {
     produkId = json['produk_id'];
     cabangId = json['cabang_id'];
     namaProduk = json['nama_produk'];
-    // golonganProduk = json['golongan_produk'];
+    golonganProduk = json['golongan_produk'];
     imageUrl = json['image_url'];
     harga = json['harga'];
     jumlah = json['jumlah'];
+    satuanProduk = json['satuan_produk'];
     jumlahMultisatuan = json['jumlah_multisatuan'];
     multisatuanJumlah = json['multisatuan_jumlah'];
     multisatuanUnit = json['multisatuan_unit'];
@@ -177,21 +183,22 @@ class Produk {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['no_invoice'] = this.noInvoice;
-    data['produk_id'] = this.produkId;
-    data['cabang_id'] = this.cabangId;
-    data['nama_produk'] = this.namaProduk;
-    // data['golongan_produk'] = this.golonganProduk;
-    data['image_url'] = this.imageUrl;
-    data['harga'] = this.harga;
-    data['jumlah'] = this.jumlah;
-    data['jumlah_multisatuan'] = this.jumlahMultisatuan;
-    data['multisatuan_jumlah'] = this.multisatuanJumlah;
-    data['multisatuan_unit'] = this.multisatuanUnit;
-    data['total_harga'] = this.totalHarga;
-    data['created_at'] = this.createdAt;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['no_invoice'] = noInvoice;
+    data['produk_id'] = produkId;
+    data['cabang_id'] = cabangId;
+    data['nama_produk'] = namaProduk;
+    data['golongan_produk'] = golonganProduk;
+    data['image_url'] = imageUrl;
+    data['harga'] = harga;
+    data['jumlah'] = jumlah;
+    data['satuan_produk'] = satuanProduk;
+    data['jumlah_multisatuan'] = jumlahMultisatuan;
+    data['multisatuan_jumlah'] = multisatuanJumlah;
+    data['multisatuan_unit'] = multisatuanUnit;
+    data['total_harga'] = totalHarga;
+    data['created_at'] = createdAt;
     return data;
   }
 }

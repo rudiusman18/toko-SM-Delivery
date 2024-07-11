@@ -334,6 +334,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       required List<dynamic> multiSatuan,
     }) {
       // var listTotalProduct = totalProduct.split("/");
+      print("isi multisatuan adalah: $productName dengan ${multiSatuan}");
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -428,12 +429,27 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     .toString(),
                 price:
                     "${shippingProvider.detailTransactionData?.data?.produk![i].totalHarga.toString()}",
-                totalProduct: shippingProvider.detailTransactionData?.data
-                        ?.produk![i].jumlahMultisatuan ??
-                    [],
-                multiSatuan: shippingProvider.detailTransactionData?.data
-                        ?.produk![i].multisatuanUnit ??
-                    [],
+                totalProduct: (shippingProvider.detailTransactionData?.data
+                                ?.produk![i].jumlahMultisatuan ??
+                            [])
+                        .isEmpty
+                    ? [
+                        shippingProvider
+                            .detailTransactionData?.data?.produk![i].jumlah
+                      ]
+                    : shippingProvider.detailTransactionData?.data?.produk![i]
+                        .jumlahMultisatuan,
+                multiSatuan: (shippingProvider.detailTransactionData?.data
+                                ?.produk![i].multisatuanUnit ??
+                            [])
+                        .isEmpty
+                    ? [
+                        shippingProvider.detailTransactionData?.data?.produk![i]
+                            .satuanProduk
+                      ]
+                    : shippingProvider.detailTransactionData?.data?.produk![i]
+                            .multisatuanUnit ??
+                        [],
               ),
             ],
           ],
