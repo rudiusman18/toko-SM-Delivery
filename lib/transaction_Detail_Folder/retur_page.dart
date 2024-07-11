@@ -19,25 +19,51 @@ class _ReturPageState extends State<ReturPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _getDetailDelivery();
+    _getDetailDelivery();
   }
 
   void _getDetailDelivery() async {
     for (var produkData in widget.produk!) {
       List<ProductReturData> listReturProduct = [];
+      if (produkData.multisatuanUnit != null &&
+          produkData.jumlahMultisatuan != null) {
+        var golProduk = produkData.golonganProduk as List<dynamic>? ?? [];
+        for (var i = 0; i < golProduk.length; i++) {
+          if (produkData.jumlahMultisatuan?[i] > 0) {
+            listReturProduct.add(
+              ProductReturData(
+                satuan: golProduk[i],
+                returValue: 0,
+                buyValue: produkData.jumlahMultisatuan?[i] ?? 0,
+              ),
+            );
+          }
+        }
 
-      if (produkData.multisatuanUnit == null) {}
-
-      // listReturProduct.add(ProductReturData(
-      //   satuan: satuan,
-      //   returValue: returValue,
-      //   buyValue: buyValue,
-      // ));
-
-      listProduct.add(ProductRetur(
-          productName: produkData.namaProduk.toString(),
-          price: produkData.harga!,
-          data: []));
+        listProduct.add(
+          ProductRetur(
+            productName: produkData.namaProduk!,
+            price: produkData.harga!,
+            data: listReturProduct,
+          ),
+        );
+      } else {
+        // single
+        listReturProduct.add(
+          ProductReturData(
+            satuan: "pcs",
+            returValue: 0,
+            buyValue: produkData.jumlah ?? 0,
+          ),
+        );
+        listProduct.add(
+          ProductRetur(
+            productName: produkData.namaProduk!,
+            price: produkData.harga!,
+            data: listReturProduct,
+          ),
+        );
+      }
     }
   }
 
