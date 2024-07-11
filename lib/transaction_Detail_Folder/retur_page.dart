@@ -29,7 +29,8 @@ class _ReturPageState extends State<ReturPage> {
           produkData.jumlahMultisatuan != null) {
         var golProduk = produkData.golonganProduk as List<dynamic>? ?? [];
         for (var i = 0; i < golProduk.length; i++) {
-          if (produkData.jumlahMultisatuan?[i] > 0) {
+          if (produkData.jumlahMultisatuan?[i] != 0 &&
+              produkData.jumlahMultisatuan?[i] != null) {
             listReturProduct.add(
               ProductReturData(
                 satuan: golProduk[i],

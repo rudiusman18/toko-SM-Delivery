@@ -424,6 +424,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       child: Text(
                         "Proses Untuk Dikirim",
                         style: urbanist.copyWith(
+                          color: Colors.white,
                           fontWeight: semiBold,
                         ),
                       ),

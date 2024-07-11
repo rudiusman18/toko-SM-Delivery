@@ -302,8 +302,10 @@ class _DeliveryPageState extends State<DeliveryPage> {
                           ),
                           decoration: BoxDecoration(
                             color: status.toLowerCase() == "proses"
-                                ? yellow
-                                : green,
+                                ? Colors.grey
+                                : status.toLowerCase() == "dikirim"
+                                    ? yellow
+                                    : green,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(

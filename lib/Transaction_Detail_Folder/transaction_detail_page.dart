@@ -472,53 +472,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             const SizedBox(
               height: 10,
             ),
-            // Text(
-            //   "Metode Pembayaran",
-            //   style: urbanist.copyWith(
-            //     color: Colors.grey,
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // Container(
-            //   width: double.infinity, // Set the desired width here
-            //   padding: const EdgeInsets.symmetric(
-            //     horizontal: 12,
-            //   ), // Optional padding for better appearance
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //         color: Colors.grey.withAlpha(90),
-            //         width: 1), // Optional border styling
-            //     borderRadius:
-            //         BorderRadius.circular(5), // Optional border radius
-            //   ),
-            //   child: DropdownButton<String>(
-            //     value: selecteditem, // Current selected item
-            //     isExpanded:
-            //         true, // Make the dropdown expand to the width of the container
-            //     hint: Text(
-            //         'Select an item'), // Hint text when no item is selected
-            //     items: lsitSelectedItem.map((String item) {
-            //       return DropdownMenuItem<String>(
-            //         value: item,
-            //         child: Text(
-            //           item,
-            //           style: urbanist,
-            //         ),
-            //       );
-            //     }).toList(),
-            //     onChanged: (String? newValue) {
-            //       setState(() {
-            //         selecteditem = newValue ?? ""; // Update the selected item
-            //       });
-            //     },
-            //     underline: SizedBox(), // Remove the default underline
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
             Row(
               children: [
                 ElevatedButton(
@@ -581,7 +534,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             Expanded(
               child: content(),
             ),
-            bottomContent(),
+            if (shippingProvider.detailTransactionData?.data?.status == 2) ...[
+              bottomContent(),
+            ],
           ],
         ),
       ),

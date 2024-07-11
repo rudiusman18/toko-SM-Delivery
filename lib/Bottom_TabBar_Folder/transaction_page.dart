@@ -227,8 +227,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           ),
                           decoration: BoxDecoration(
                             color: status.toLowerCase() == "proses"
-                                ? yellow
-                                : green,
+                                ? Colors.grey
+                                : status.toLowerCase() == "dikirim"
+                                    ? yellow
+                                    : green,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
