@@ -539,6 +539,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       "Pesanan Diterima",
                       style: urbanist.copyWith(
                         fontWeight: semiBold,
+                        color: Colors.white,
                       ),
                     ),
                   ),

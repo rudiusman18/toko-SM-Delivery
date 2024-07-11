@@ -145,7 +145,11 @@ class _TransactionPageState extends State<TransactionPage> {
                   resiId: invoice,
                 ),
                 type: PageTransitionType.leftToRight,
-              ));
+              )).then((_) {
+            setState(() {
+              _getTransactionHistory();
+            });
+          });
         },
         child: Container(
           margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),
