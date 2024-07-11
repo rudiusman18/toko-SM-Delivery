@@ -7,6 +7,65 @@ class LogoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
+    _modalDialog({required String title, required String messages}) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              10,
+            ),
+          ),
+          title: Text(
+            title,
+            style: urbanist.copyWith(
+              fontWeight: bold,
+            ),
+          ),
+          content: RichText(
+            text: TextSpan(
+              text: messages.replaceFirst("logout?", ""),
+              style: urbanist.copyWith(
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: messages.split(" ").last.split("?").first,
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                    fontWeight: bold,
+                  ),
+                ),
+                TextSpan(
+                  text: "?",
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+              ),
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Batal'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: green,
+              ),
+              onPressed: () async {},
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget header() {
       return Container(
         color: Colors.white,
@@ -58,6 +117,7 @@ class LogoutPage extends StatelessWidget {
             ),
             Text(
               value,
+              style: urbanist,
             ),
           ],
         ),
@@ -128,8 +188,65 @@ class LogoutPage extends StatelessWidget {
                     title: "Nama Lengkap",
                     value: "Lorem Ipsum Dolor",
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  profileItem(
+                    title: "Nama Lengkap",
+                    value: "Lorem Ipsum Dolor",
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  profileItem(
+                    title: "Nama Lengkap",
+                    value: "Lorem Ipsum Dolor",
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  profileItem(
+                    title: "Nama Lengkap",
+                    value: "Lorem Ipsum Dolor",
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  profileItem(
+                    title: "Nama Lengkap",
+                    value: "Lorem Ipsum Dolor",
+                  ),
                 ],
               ),
+            ),
+            InkWell(
+              onTap: () {
+                _modalDialog(
+                  title: "Warning",
+                  messages: "Apakah anda yakin ingin melakukan logout?",
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    SolarIconsBold.power,
+                    color: green,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Logout",
+                    style: urbanist.copyWith(
+                      color: green,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
           ],
         ),
