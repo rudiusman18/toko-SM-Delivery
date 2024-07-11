@@ -66,7 +66,9 @@ class _HomePageState extends State<HomePage> {
     print("Melakukan load data dengan time : $time");
 
     if (await shippingProvider.getStateDataByTime(
-        time: time, token: authProvider.user.token.toString())) {
+      time: time,
+      token: authProvider.user.token.toString(),
+    )) {
       print(
           "Get data success ${shippingProvider.shippingState?.data.toString()}");
     } else {
@@ -192,10 +194,8 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      filterSelectedIndex = 0;
-                      _getTransactionHistoryByTime();
-                    });
+                    filterSelectedIndex = 0;
+                    _getTransactionHistoryByTime();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -217,10 +217,8 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      _getTransactionHistoryByTime();
-                      filterSelectedIndex = 1;
-                    });
+                    filterSelectedIndex = 1;
+                    _getTransactionHistoryByTime();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -242,10 +240,8 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      _getTransactionHistoryByTime();
-                      filterSelectedIndex = 2;
-                    });
+                    filterSelectedIndex = 2;
+                    _getTransactionHistoryByTime();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -267,10 +263,8 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      _getTransactionHistoryByTime();
-                      filterSelectedIndex = 3;
-                    });
+                    filterSelectedIndex = 3;
+                    _getTransactionHistoryByTime();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
