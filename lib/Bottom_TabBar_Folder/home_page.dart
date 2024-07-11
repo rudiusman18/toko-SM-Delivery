@@ -9,6 +9,7 @@ import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:toko_sm_delivery/bottom_tabbar.dart';
+import 'package:toko_sm_delivery/logout_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -157,9 +158,19 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const Spacer(),
-            const Icon(
-              SolarIconsBold.user,
-              size: 35,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                      child: const LogoutPage(),
+                      type: PageTransitionType.rightToLeft,
+                    ));
+              },
+              child: const Icon(
+                SolarIconsBold.user,
+                size: 35,
+              ),
             ),
           ],
         ),
