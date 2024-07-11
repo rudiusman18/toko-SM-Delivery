@@ -383,6 +383,7 @@ class _ReturPageState extends State<ReturPage> {
                     child: Text(
                       "Proses Retur",
                       style: urbanist.copyWith(
+                        color: Colors.white,
                         fontWeight: semiBold,
                       ),
                     ),
