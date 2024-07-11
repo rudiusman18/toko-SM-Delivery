@@ -133,7 +133,7 @@ class Produk {
   int? produkId;
   int? cabangId;
   String? namaProduk;
-  // dynamic golonganProduk;
+  dynamic golonganProduk;
   String? imageUrl;
   int? harga;
   int? jumlah;
@@ -149,7 +149,7 @@ class Produk {
       this.produkId,
       this.cabangId,
       this.namaProduk,
-      // this.golonganProduk,
+      this.golonganProduk,
       this.imageUrl,
       this.harga,
       this.jumlah,
@@ -165,7 +165,7 @@ class Produk {
     produkId = json['produk_id'];
     cabangId = json['cabang_id'];
     namaProduk = json['nama_produk'];
-    // golonganProduk = json['golongan_produk'];
+    golonganProduk = json['golongan_produk'];
     imageUrl = json['image_url'];
     harga = json['harga'];
     jumlah = json['jumlah'];
@@ -183,7 +183,7 @@ class Produk {
     data['produk_id'] = this.produkId;
     data['cabang_id'] = this.cabangId;
     data['nama_produk'] = this.namaProduk;
-    // data['golongan_produk'] = this.golonganProduk;
+    data['golongan_produk'] = this.golonganProduk;
     data['image_url'] = this.imageUrl;
     data['harga'] = this.harga;
     data['jumlah'] = this.jumlah;
