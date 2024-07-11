@@ -224,6 +224,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
     }) {
       return InkWell(
         onTap: () {
+          setState(() {
+            shippingProvider.detailDeliveryData = null;
+          });
           Navigator.push(
             context,
             PageTransition(
