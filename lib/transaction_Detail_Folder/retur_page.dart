@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class ReturPage extends StatefulWidget {
-  const ReturPage({super.key});
+  final List<Produk>? produk;
+  const ReturPage({super.key, required this.produk});
 
   @override
   State<ReturPage> createState() => _ReturPageState();
@@ -12,6 +14,32 @@ class ReturPage extends StatefulWidget {
 class _ReturPageState extends State<ReturPage> {
   TextEditingController descriptionTextField = TextEditingController(text: "");
   List<ProductRetur> listProduct = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // _getDetailDelivery();
+  }
+
+  void _getDetailDelivery() async {
+    for (var produkData in widget.produk!) {
+      List<ProductReturData> listReturProduct = [];
+
+      if (produkData.multisatuanUnit == null) {}
+
+      // listReturProduct.add(ProductReturData(
+      //   satuan: satuan,
+      //   returValue: returValue,
+      //   buyValue: buyValue,
+      // ));
+
+      listProduct.add(ProductRetur(
+          productName: produkData.namaProduk.toString(),
+          price: produkData.harga!,
+          data: []));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -375,7 +403,7 @@ class _ReturPageState extends State<ReturPage> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            "2",
+                            "${(widget.produk ?? []).length}",
                             style: urbanist.copyWith(
                               fontWeight: semiBold,
                               color: Colors.white,

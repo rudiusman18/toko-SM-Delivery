@@ -133,13 +133,13 @@ class Produk {
   int? produkId;
   int? cabangId;
   String? namaProduk;
-  List<String>? golonganProduk;
+  // dynamic golonganProduk;
   String? imageUrl;
   int? harga;
   int? jumlah;
   List<dynamic>? jumlahMultisatuan;
-  List<int>? multisatuanJumlah;
-  List<String>? multisatuanUnit;
+  List<dynamic>? multisatuanJumlah;
+  List<dynamic>? multisatuanUnit;
   int? totalHarga;
   String? createdAt;
 
@@ -149,7 +149,7 @@ class Produk {
       this.produkId,
       this.cabangId,
       this.namaProduk,
-      this.golonganProduk,
+      // this.golonganProduk,
       this.imageUrl,
       this.harga,
       this.jumlah,
@@ -165,13 +165,13 @@ class Produk {
     produkId = json['produk_id'];
     cabangId = json['cabang_id'];
     namaProduk = json['nama_produk'];
-    golonganProduk = json['golongan_produk'].cast<String>();
+    // golonganProduk = json['golongan_produk'];
     imageUrl = json['image_url'];
     harga = json['harga'];
     jumlah = json['jumlah'];
     jumlahMultisatuan = json['jumlah_multisatuan'];
-    multisatuanJumlah = json['multisatuan_jumlah'].cast<int>();
-    multisatuanUnit = json['multisatuan_unit'].cast<String>();
+    multisatuanJumlah = json['multisatuan_jumlah'];
+    multisatuanUnit = json['multisatuan_unit'];
     totalHarga = json['total_harga'];
     createdAt = json['created_at'];
   }
@@ -183,7 +183,7 @@ class Produk {
     data['produk_id'] = this.produkId;
     data['cabang_id'] = this.cabangId;
     data['nama_produk'] = this.namaProduk;
-    data['golongan_produk'] = this.golonganProduk;
+    // data['golongan_produk'] = this.golonganProduk;
     data['image_url'] = this.imageUrl;
     data['harga'] = this.harga;
     data['jumlah'] = this.jumlah;

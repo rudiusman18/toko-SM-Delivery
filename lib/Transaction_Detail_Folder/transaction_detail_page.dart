@@ -169,7 +169,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       Navigator.push(
                         context,
                         PageTransition(
-                          child: const ReturPage(),
+                          child: ReturPage(
+                              produk: shippingProvider
+                                  .detailTransactionData?.data?.produk),
                           type: PageTransitionType.leftToRight,
                         ),
                       );
@@ -329,7 +331,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       required String? productName,
       required String price,
       required List<dynamic>? totalProduct,
-      required List<String?> multiSatuan,
+      required List<dynamic> multiSatuan,
     }) {
       // var listTotalProduct = totalProduct.split("/");
       return Column(
@@ -362,6 +364,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               ),
             ]
           ],
+          const Divider(
+            color: Colors.grey,
+          ),
         ],
       );
     }
@@ -423,17 +428,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     .toString(),
                 price:
                     "${shippingProvider.detailTransactionData?.data?.produk![i].totalHarga.toString()}",
-                totalProduct: shippingProvider
-                    .detailTransactionData?.data?.produk![i].jumlahMultisatuan,
+                totalProduct: shippingProvider.detailTransactionData?.data
+                        ?.produk![i].jumlahMultisatuan ??
+                    [],
                 multiSatuan: shippingProvider.detailTransactionData?.data
                         ?.produk![i].multisatuanUnit ??
                     [],
               ),
-              i == 1
-                  ? const SizedBox()
-                  : const Divider(
-                      color: Colors.grey,
-                    ),
             ],
           ],
         ),

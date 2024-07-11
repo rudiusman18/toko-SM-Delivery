@@ -357,12 +357,14 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 index: i,
               ),
             ],
-            for (var data
-                in shippingProvider.detailDeliveryData!.data!.golongan!) ...[
-              golonganItem(
-                golongan: "${data.label}",
-                product: data.data,
-              ),
+            if (shippingProvider.detailDeliveryData != null) ...[
+              for (var data
+                  in shippingProvider.detailDeliveryData!.data!.golongan!) ...[
+                golonganItem(
+                  golongan: "${data.label}",
+                  product: data.data,
+                ),
+              ],
             ],
           ],
         ),
