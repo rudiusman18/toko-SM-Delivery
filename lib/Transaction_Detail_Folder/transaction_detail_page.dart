@@ -334,7 +334,8 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       required List<dynamic> multiSatuan,
     }) {
       // var listTotalProduct = totalProduct.split("/");
-      print("isi multisatuan adalah: $productName dengan ${multiSatuan}");
+      print(
+          "isi multisatuan adalah: $productName dengan ${multiSatuan} dengan $totalProduct");
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

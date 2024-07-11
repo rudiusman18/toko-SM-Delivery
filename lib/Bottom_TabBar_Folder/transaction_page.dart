@@ -138,6 +138,10 @@ class _TransactionPageState extends State<TransactionPage> {
     }) {
       return InkWell(
         onTap: () {
+          setState(() {
+            shippingProvider.detailTransactionData = null;
+          });
+
           Navigator.push(
               context,
               PageTransition(
