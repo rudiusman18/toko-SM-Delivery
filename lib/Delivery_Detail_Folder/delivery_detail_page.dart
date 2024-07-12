@@ -16,6 +16,8 @@ class DeliveryDetailPage extends StatefulWidget {
 }
 
 class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
+  Map<String, List<bool>> mapGolongan = {};
+
   @override
   void initState() {
     // TODO: implement initState
@@ -49,6 +51,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
   @override
   Widget build(BuildContext context) {
     ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     // ignore: no_leading_underscores_for_local_identifiers
     _modalDialog({required String title, required String messages}) {
@@ -101,15 +104,21 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: green,
               ),
-              onPressed: () {},
+              onPressed: () async {
+                await shippingProvider.postDeliveryData(
+                  token: authProvider.user.token ?? "",
+                  noResi:
+                      shippingProvider.detailDeliveryData?.data?.noResi ?? "",
+                  status: 1,
+                  golongan: mapGolongan,
+                );
+              },
               child: const Text('OK'),
             ),
           ],
         ),
       );
     }
-
-    _showBottomDialog() {}
 
     Widget header() {
       return Container(
@@ -199,6 +208,16 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       required String golongan,
       required List<GolData>? product,
     }) {
+      // if (mapGolongan.isEmpty) {
+      if (mapGolongan.keys.length !=
+          (shippingProvider.detailDeliveryData?.data?.golongan ?? []).length) {
+        mapGolongan[golongan] = [
+          for (var i = 0; i < (product?.length ?? 0); i++) false,
+        ];
+      }
+
+      // }
+
       return Container(
         margin: const EdgeInsets.only(
           bottom: 20,
@@ -241,53 +260,76 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
               height: 10,
             ),
             for (var i = 0; i < (product?.length ?? 0); i++) ...{
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      "${product?[i].namaProduk}",
-                      style: urbanist,
-                    ),
-                  ),
-                  Text(
-                    "${product?[i].jumlah} Pcs",
-                    style: urbanist,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        product[i].checked = !product[i].checked!;
-                        print("isi produk nya adalah: ${product[i].checked}");
-                        print("isi produk nya adalah: ${product[i].toJson()}");
-                      });
-                    },
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color:
-                            product![i].checked! ? green : Colors.transparent,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          width: 1,
-                          color: !product[i].checked!
-                              ? Colors.grey
-                              : Colors.transparent,
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    product[i].checked = !product[i].checked!;
+                    mapGolongan[golongan]?[i] = product[i].checked ?? false;
+
+                    print(
+                        "isi mapgolongan njing: ${mapGolongan} dengan golongan $golongan");
+                    print("isi produk nya adalah: ${product[i].checked}");
+                    print("isi produk nya adalah: ${product[i].toJson()}");
+                  });
+                },
+                child: Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "${product?[i].namaProduk}",
+                          style: urbanist,
                         ),
                       ),
-                      child: const FittedBox(
-                        fit: BoxFit.cover,
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.white,
+                      Text(
+                        "${product?[i].jumlah} Pcs",
+                        style: urbanist,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            product[i].checked = !product[i].checked!;
+                            mapGolongan[golongan]?[i] =
+                                product[i].checked ?? false;
+
+                            print("isi mapgolongan njing: ${mapGolongan}");
+                            print(
+                                "isi produk nya adalah: ${product[i].checked}");
+                            print(
+                                "isi produk nya adalah: ${product[i].toJson()}");
+                          });
+                        },
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: product![i].checked!
+                                ? green
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              width: 1,
+                              color: !product[i].checked!
+                                  ? Colors.grey
+                                  : Colors.transparent,
+                            ),
+                          ),
+                          child: const FittedBox(
+                            fit: BoxFit.cover,
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -347,19 +389,20 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 i++) ...[
               transactionItem(
                 transactionName:
-                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].namaPelanggan}",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi?[i].namaPelanggan}",
                 date:
-                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].date}",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi?[i].date}",
                 invoiceNumber:
-                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].noInvoice}",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi?[i].noInvoice}",
                 totalProduct:
-                    "${shippingProvider.detailDeliveryData?.data?.transaksi![i].jumlahProduk}",
+                    "${shippingProvider.detailDeliveryData?.data?.transaksi?[i].jumlahProduk}",
                 index: i,
               ),
             ],
             if (shippingProvider.detailDeliveryData != null) ...[
               for (var data
-                  in shippingProvider.detailDeliveryData!.data!.golongan!) ...[
+                  in (shippingProvider.detailDeliveryData?.data?.golongan ??
+                      [])) ...[
                 golonganItem(
                   golongan: "${data.label}",
                   product: data.data,
@@ -447,6 +490,7 @@ class ProductGolonganItem {
   String productName = "";
   String totalProduct = "";
   bool isChecked = false;
+
   ProductGolonganItem({
     this.productName = "",
     this.totalProduct = "",

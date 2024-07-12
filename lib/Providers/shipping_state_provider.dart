@@ -185,4 +185,19 @@ class ShippingProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> postDeliveryData({
+    required String token,
+    required String noResi,
+    required int status,
+    required Map<String, List<bool>> golongan,
+  }) async {
+    try {
+      await ShippingService().postDetailDelivery(
+          token: token, noResi: noResi, status: status, golongan: golongan);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

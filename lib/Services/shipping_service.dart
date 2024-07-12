@@ -168,4 +168,30 @@ class ShippingService {
       throw Exception("Gagal Memperbarui data");
     }
   }
+
+  Future<Map<String, dynamic>> postDetailDelivery({
+    required String token,
+    required String noResi,
+    required int status,
+    required Map<String, List<bool>> golongan,
+  }) async {
+    var url = Uri.parse("${baseURL}pengiriman/data");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    Map data = {
+      'no_resi': noResi,
+      'status': status,
+      'golongan': golongan,
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      throw Exception("Gagal melakukan postDelivery");
+    }
+  }
 }
