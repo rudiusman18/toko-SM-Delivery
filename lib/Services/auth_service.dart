@@ -21,7 +21,7 @@ class AuthService {
       UserModel login = UserModel.fromJson(data);
       return login;
     } else {
-      throw Exception("Gagal Login");
+      throw Exception("${response.body}");
     }
   }
 

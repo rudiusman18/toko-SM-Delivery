@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
@@ -112,6 +110,8 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                   status: 1,
                   golongan: mapGolongan,
                 );
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: const Text('OK'),
             ),
@@ -212,7 +212,8 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       if (mapGolongan.keys.length !=
           (shippingProvider.detailDeliveryData?.data?.golongan ?? []).length) {
         mapGolongan[golongan] = [
-          for (var i = 0; i < (product?.length ?? 0); i++) false,
+          for (var i = 0; i < (product?.length ?? 0); i++)
+            product?[i].checked ?? false,
         ];
       }
 
@@ -437,7 +438,17 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await shippingProvider.postDeliveryData(
+                          token: authProvider.user.token ?? "",
+                          noResi: shippingProvider
+                                  .detailDeliveryData?.data?.noResi ??
+                              "",
+                          status: 1,
+                          golongan: mapGolongan,
+                        );
+                        Navigator.pop(context);
+                      },
                       child: Text(
                         "Simpan Checklist",
                         style: urbanist.copyWith(

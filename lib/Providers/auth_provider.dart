@@ -16,6 +16,13 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  late String _loginErrorMessage;
+  String get loginErrorMessage => _loginErrorMessage;
+  set loginErrorMessage(String newLoginErrorMessage) {
+    _loginErrorMessage = newLoginErrorMessage;
+    notifyListeners();
+  }
+
   Future<bool> kurirLogin({
     required String email,
     required String password,
@@ -32,6 +39,7 @@ class AuthProvider with ChangeNotifier {
       return true;
     } catch (e) {
       print("Error : $e");
+      _loginErrorMessage = e.toString();
       return false;
     }
   }

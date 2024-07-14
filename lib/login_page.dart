@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
           //   isLoading = false;
           // });
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               backgroundColor: Colors.red,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               content: Text(
-                'Gagal Login!',
+                '${authProvider.loginErrorMessage}',
                 textAlign: TextAlign.center,
               ),
             ),
