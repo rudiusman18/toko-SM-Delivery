@@ -70,34 +70,6 @@ class _ReturPageState extends State<ReturPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (listProduct.isEmpty) {
-      listProduct = [
-        ProductRetur(
-          productName: "Susu UHT Strawberry",
-          price: 55000,
-          data: [
-            ProductReturData(satuan: "pcs", returValue: 0, buyValue: 10),
-            ProductReturData(satuan: "pak", returValue: 0, buyValue: 9),
-            ProductReturData(satuan: "kardus", returValue: 0, buyValue: 5),
-          ],
-        ),
-        ProductRetur(
-          productName: "Aldabra",
-          price: 55000,
-          data: [
-            ProductReturData(satuan: "pcs", returValue: 0, buyValue: 10),
-          ],
-        ),
-        ProductRetur(
-          productName: "Skull & Co Case",
-          price: 55000,
-          data: [
-            ProductReturData(satuan: "pcs", returValue: 0, buyValue: 10),
-          ],
-        )
-      ];
-    }
-
     // ignore: no_leading_underscores_for_local_identifiers
     _modalDialog({required String title, required String messages}) {
       showDialog(
