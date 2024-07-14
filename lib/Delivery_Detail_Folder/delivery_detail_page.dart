@@ -444,7 +444,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           noResi: shippingProvider
                                   .detailDeliveryData?.data?.noResi ??
                               "",
-                          status: 1,
+                          status: 0,
                           golongan: mapGolongan,
                         );
                         Navigator.pop(context);
