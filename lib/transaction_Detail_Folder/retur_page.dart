@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
 import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
+import 'package:toko_sm_delivery/Providers/auth_provider.dart';
+import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class ReturPage extends StatefulWidget {
@@ -13,63 +16,66 @@ class ReturPage extends StatefulWidget {
 
 class _ReturPageState extends State<ReturPage> {
   TextEditingController descriptionTextField = TextEditingController(text: "");
-  List<ProductRetur> listProduct = [];
+  // List<ProductRetur> listProduct = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getDetailDelivery();
+    // _getDetailDelivery();
   }
 
-  void _getDetailDelivery() async {
-    for (var produkData in widget.produk!) {
-      List<ProductReturData> listReturProduct = [];
-      if (produkData.multisatuanUnit != null &&
-          produkData.jumlahMultisatuan != null) {
-        var golProduk = produkData.golonganProduk as List<dynamic>? ?? [];
-        for (var i = 0; i < golProduk.length; i++) {
-          if (produkData.jumlahMultisatuan?[i] != 0 &&
-              produkData.jumlahMultisatuan?[i] != null) {
-            listReturProduct.add(
-              ProductReturData(
-                satuan: golProduk[i],
-                returValue: 0,
-                buyValue: produkData.jumlahMultisatuan?[i] ?? 0,
-              ),
-            );
-          }
-        }
+  // void _getDetailDelivery() async {
+  //   for (var produkData in widget.produk!) {
+  //     List<ProductReturData> listReturProduct = [];
+  //     if (produkData.multisatuanUnit != null &&
+  //         produkData.jumlahMultisatuan != null) {
+  //       var golProduk = produkData.golonganProduk as List<dynamic>? ?? [];
+  //       for (var i = 0; i < golProduk.length; i++) {
+  //         if (produkData.jumlahMultisatuan?[i] != 0 &&
+  //             produkData.jumlahMultisatuan?[i] != null) {
+  //           listReturProduct.add(
+  //             ProductReturData(
+  //               satuan: golProduk[i],
+  //               returValue: 0,
+  //               buyValue: produkData.jumlahMultisatuan?[i] ?? 0,
+  //             ),
+  //           );
+  //         }
+  //       }
 
-        listProduct.add(
-          ProductRetur(
-            productName: produkData.namaProduk!,
-            price: produkData.harga!,
-            data: listReturProduct,
-          ),
-        );
-      } else {
-        // single
-        listReturProduct.add(
-          ProductReturData(
-            satuan: "pcs",
-            returValue: 0,
-            buyValue: produkData.jumlah ?? 0,
-          ),
-        );
-        listProduct.add(
-          ProductRetur(
-            productName: produkData.namaProduk!,
-            price: produkData.harga!,
-            data: listReturProduct,
-          ),
-        );
-      }
-    }
-  }
+  //       listProduct.add(
+  //         ProductRetur(
+  //           productName: produkData.namaProduk!,
+  //           price: produkData.harga!,
+  //           data: listReturProduct,
+  //         ),
+  //       );
+  //     } else {
+  //       // single
+  //       listReturProduct.add(
+  //         ProductReturData(
+  //           satuan: "pcs",
+  //           returValue: 0,
+  //           buyValue: produkData.jumlah ?? 0,
+  //         ),
+  //       );
+  //       listProduct.add(
+  //         ProductRetur(
+  //           productName: produkData.namaProduk!,
+  //           price: produkData.harga!,
+  //           data: listReturProduct,
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
     // ignore: no_leading_underscores_for_local_identifiers
     _modalDialog({required String title, required String messages}) {
       showDialog(
@@ -102,7 +108,10 @@ class _ReturPageState extends State<ReturPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: green,
               ),
-              onPressed: () {},
+              onPressed: () async {
+                // await shippingProvider.postReturData(token: authProvider.user.token ?? "", noInvoice: widget.produk.first.noInvoice, keterangan: keterangan, products: products)
+                print("product yang ditekan isinya adalah: ");
+              },
               child: const Text('OK'),
             ),
           ],
@@ -181,9 +190,7 @@ class _ReturPageState extends State<ReturPage> {
     }
 
     Widget productItem({
-      required String productName,
-      required int price,
-      required List<ProductReturData> data,
+      required Produk product,
     }) {
       return Container(
         margin: const EdgeInsets.only(
@@ -198,11 +205,11 @@ class _ReturPageState extends State<ReturPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    productName,
+                    product.namaProduk.toString(),
                     style: urbanist,
                   ),
                   Text(
-                    "@$price",
+                    "@${product.harga}",
                     style: urbanist.copyWith(
                       color: Colors.grey,
                     ),
@@ -214,77 +221,89 @@ class _ReturPageState extends State<ReturPage> {
               flex: 2,
               child: Column(
                 children: [
-                  for (ProductReturData detailData in data) ...{
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            detailData.satuan,
-                            style: urbanist,
-                            textAlign: TextAlign.end,
+                  for (var index = 0;
+                      index <
+                          (product.golonganProduk is List
+                              ? (product.golonganProduk as List).length
+                              : 1);
+                      index++) ...{
+                    if ((product.golonganProduk is List) &&
+                            product.jumlahMultisatuan?[index] != null &&
+                            product.jumlahMultisatuan?[index] != 0 ||
+                        (product.golonganProduk is! List)) ...{
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              product.golonganProduk is List
+                                  ? product.golonganProduk[index]
+                                  : product.golonganProduk,
+                              style: urbanist,
+                              textAlign: TextAlign.end,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (detailData.returValue > 0) {
-                                detailData.returValue -= 1;
-                              }
-                            });
-                          },
-                          child: const Icon(
-                            SolarIconsBold.minusSquare,
-                            color: Colors.grey,
+                          const SizedBox(
+                            width: 5,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 1,
-                            horizontal: 15,
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                // if (detailData.returValue > 0) {
+                                //   detailData.returValue -= 1;
+                                // }
+                              });
+                            },
+                            child: const Icon(
+                              SolarIconsBold.minusSquare,
+                              color: Colors.grey,
+                            ),
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withAlpha(80),
-                            borderRadius: BorderRadius.circular(10),
+                          const SizedBox(
+                            width: 5,
                           ),
-                          child: Text(
-                            "${detailData.returValue}",
-                            style: urbanist,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 1,
+                              horizontal: 15,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withAlpha(80),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              "${0}",
+                              style: urbanist,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (detailData.returValue < detailData.buyValue) {
-                                detailData.returValue += 1;
-                              }
-                            });
-                          },
-                          child: Icon(
-                            SolarIconsBold.addSquare,
-                            color: green,
+                          const SizedBox(
+                            width: 5,
                           ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "${detailData.buyValue}",
-                            style: urbanist,
-                            textAlign: TextAlign.center,
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                // if (detailData.returValue < detailData.buyValue) {
+                                //   detailData.returValue += 1;
+                                // }
+                              });
+                            },
+                            child: Icon(
+                              SolarIconsBold.addSquare,
+                              color: green,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                          Expanded(
+                            child: Text(
+                              "${(product.golonganProduk is List) ? (product.jumlahMultisatuan?[index]) : product.jumlah}",
+                              style: urbanist,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    },
                   },
                 ],
               ),
@@ -444,11 +463,9 @@ class _ReturPageState extends State<ReturPage> {
                       height: 5,
                     ),
                     // NOTE: Product Item
-                    for (ProductRetur data in listProduct) ...{
+                    for (Produk data in (widget.produk ?? [])) ...{
                       productItem(
-                        productName: data.productName,
-                        price: data.price,
-                        data: data.data,
+                        product: data,
                       )
                     }
                   ],

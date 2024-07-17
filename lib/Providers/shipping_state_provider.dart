@@ -200,4 +200,23 @@ class ShippingProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> postReturData({
+    required String token,
+    required String noInvoice,
+    required String keterangan,
+    required List<Produk> products,
+  }) async {
+    try {
+      await ShippingService().postReturTransaction(
+        token: token,
+        noInvoice: noInvoice,
+        keterangan: keterangan,
+        products: products,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

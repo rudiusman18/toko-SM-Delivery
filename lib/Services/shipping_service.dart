@@ -194,4 +194,49 @@ class ShippingService {
       throw Exception("Gagal melakukan postDelivery");
     }
   }
+
+  Future<Map<String, dynamic>> postReturTransaction({
+    required String token,
+    required String noInvoice,
+    required String keterangan,
+    required List<Produk> products,
+  }) async {
+    var url = Uri.parse("${baseURL}pengiriman/data");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    Map data = {
+      'no_invoice': noInvoice,
+      'keterangan': keterangan,
+      'produk': generateProducts(initProducts: products),
+    };
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      throw Exception("Gagal melakukan postDelivery");
+    }
+  }
+
+  List<Map<String, dynamic>> generateProducts(
+      {required List<Produk> initProducts}) {
+    // Create a list to hold the dynamic products
+    List<Map<String, dynamic>> products = [];
+
+    // Convert Product objects to Map and add them to the list
+    for (Produk product in initProducts) {
+      products.add({
+        "id": "${product.sId}",
+        "produk_id": "${product.produkId}",
+        "nama_produk": "${product.namaProduk}",
+        "jumlah": "${product.jumlah}",
+        "jumlah_multisatuan": product.jumlahMultisatuan
+      });
+    }
+
+    return products;
+  }
 }
