@@ -145,6 +145,7 @@ class Produk {
   List<dynamic>? multisatuanUnit;
   int? totalHarga;
   String? createdAt;
+  List<int>? returValue; // New variable
 
   Produk({
     this.sId,
@@ -162,7 +163,15 @@ class Produk {
     this.multisatuanUnit,
     this.totalHarga,
     this.createdAt,
-  });
+  }) {
+    // Initialize returValue based on the condition
+    if ((multisatuanJumlah == null || multisatuanJumlah!.isEmpty) &&
+        jumlah != null) {
+      returValue = List<int>.filled(1, 0);
+    } else {
+      returValue = List<int>.filled(multisatuanJumlah?.length ?? 0, 0);
+    }
+  }
 
   Produk.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -180,6 +189,14 @@ class Produk {
     multisatuanUnit = json['multisatuan_unit'];
     totalHarga = json['total_harga'];
     createdAt = json['created_at'];
+
+    // Initialize returValue based on the condition
+    if ((multisatuanJumlah == null || multisatuanJumlah!.isEmpty) &&
+        jumlah != null) {
+      returValue = List<int>.filled(1, 0);
+    } else {
+      returValue = List<int>.filled(multisatuanJumlah?.length ?? 0, 0);
+    }
   }
 
   Map<String, dynamic> toJson() {

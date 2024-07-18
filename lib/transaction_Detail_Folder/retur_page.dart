@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
@@ -16,60 +18,6 @@ class ReturPage extends StatefulWidget {
 
 class _ReturPageState extends State<ReturPage> {
   TextEditingController descriptionTextField = TextEditingController(text: "");
-  // List<ProductRetur> listProduct = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // _getDetailDelivery();
-  }
-
-  // void _getDetailDelivery() async {
-  //   for (var produkData in widget.produk!) {
-  //     List<ProductReturData> listReturProduct = [];
-  //     if (produkData.multisatuanUnit != null &&
-  //         produkData.jumlahMultisatuan != null) {
-  //       var golProduk = produkData.golonganProduk as List<dynamic>? ?? [];
-  //       for (var i = 0; i < golProduk.length; i++) {
-  //         if (produkData.jumlahMultisatuan?[i] != 0 &&
-  //             produkData.jumlahMultisatuan?[i] != null) {
-  //           listReturProduct.add(
-  //             ProductReturData(
-  //               satuan: golProduk[i],
-  //               returValue: 0,
-  //               buyValue: produkData.jumlahMultisatuan?[i] ?? 0,
-  //             ),
-  //           );
-  //         }
-  //       }
-
-  //       listProduct.add(
-  //         ProductRetur(
-  //           productName: produkData.namaProduk!,
-  //           price: produkData.harga!,
-  //           data: listReturProduct,
-  //         ),
-  //       );
-  //     } else {
-  //       // single
-  //       listReturProduct.add(
-  //         ProductReturData(
-  //           satuan: "pcs",
-  //           returValue: 0,
-  //           buyValue: produkData.jumlah ?? 0,
-  //         ),
-  //       );
-  //       listProduct.add(
-  //         ProductRetur(
-  //           productName: produkData.namaProduk!,
-  //           price: produkData.harga!,
-  //           data: listReturProduct,
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +58,8 @@ class _ReturPageState extends State<ReturPage> {
               ),
               onPressed: () async {
                 // await shippingProvider.postReturData(token: authProvider.user.token ?? "", noInvoice: widget.produk.first.noInvoice, keterangan: keterangan, products: products)
-                print("product yang ditekan isinya adalah: ");
+                print(
+                    "product yang ditekan isinya adalah: ${authProvider.user.token ?? ""} dengan ${widget.produk?.first.noInvoice} dengan isi produk ${widget.produk}");
               },
               child: const Text('OK'),
             ),
@@ -238,9 +187,9 @@ class _ReturPageState extends State<ReturPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              product.golonganProduk is List
-                                  ? product.golonganProduk[index]
-                                  : product.golonganProduk,
+                              product.multisatuanUnit is List
+                                  ? (product.multisatuanUnit?[index] ?? [])
+                                  : product.satuanProduk,
                               style: urbanist,
                               textAlign: TextAlign.end,
                             ),
@@ -254,6 +203,11 @@ class _ReturPageState extends State<ReturPage> {
                                 // if (detailData.returValue > 0) {
                                 //   detailData.returValue -= 1;
                                 // }
+                                if ((product.returValue?[index] ?? 0) > 0) {
+                                  setState(() {
+                                    product.returValue?[index] -= 1;
+                                  });
+                                }
                               });
                             },
                             child: const Icon(
@@ -274,7 +228,7 @@ class _ReturPageState extends State<ReturPage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              "${0}",
+                              "${product.returValue?[index]}",
                               style: urbanist,
                             ),
                           ),
@@ -284,9 +238,18 @@ class _ReturPageState extends State<ReturPage> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                // if (detailData.returValue < detailData.buyValue) {
-                                //   detailData.returValue += 1;
-                                // }
+                                var multiSatuan = int.tryParse(
+                                        (product.multisatuanJumlah?[index] ??
+                                            "1")) ??
+                                    0;
+
+                                int sum = product.returValue?.reduce(
+                                        (value, element) => value + element) ??
+                                    0;
+                      
+                                setState(() {
+                                  product.returValue?[index] += 1;
+                                });
                               });
                             },
                             child: Icon(
@@ -296,7 +259,7 @@ class _ReturPageState extends State<ReturPage> {
                           ),
                           Expanded(
                             child: Text(
-                              "${(product.golonganProduk is List) ? (product.jumlahMultisatuan?[index]) : product.jumlah}",
+                              "${(product.jumlahMultisatuan?[index] ?? "")} (${(product.golonganProduk is List) ? (product.jumlahMultisatuan?[index]) * int.tryParse((product.multisatuanJumlah?[index])) ?? 0 : product.jumlah})",
                               style: urbanist,
                               textAlign: TextAlign.center,
                             ),
