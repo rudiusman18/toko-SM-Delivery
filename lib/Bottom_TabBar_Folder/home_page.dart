@@ -210,6 +210,7 @@ class _HomePageState extends State<HomePage> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -233,6 +234,7 @@ class _HomePageState extends State<HomePage> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -256,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -267,7 +270,10 @@ class _HomePageState extends State<HomePage> {
                     _getTransactionHistoryByTime();
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
                     alignment: Alignment.center,
                     color:
                         filterSelectedIndex == 3 ? green : Colors.transparent,
@@ -279,6 +285,7 @@ class _HomePageState extends State<HomePage> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
