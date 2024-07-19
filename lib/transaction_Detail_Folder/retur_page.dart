@@ -57,9 +57,17 @@ class _ReturPageState extends State<ReturPage> {
                 backgroundColor: green,
               ),
               onPressed: () async {
-                // await shippingProvider.postReturData(token: authProvider.user.token ?? "", noInvoice: widget.produk.first.noInvoice, keterangan: keterangan, products: products)
-                print(
-                    "product yang ditekan isinya adalah: ${authProvider.user.token ?? ""} dengan ${widget.produk?.first.noInvoice} dengan isi produk ${widget.produk}");
+                await shippingProvider.postReturData(
+                  token: authProvider.user.token ?? "",
+                  pelangganId: shippingProvider
+                          .detailTransactionData?.data?.pelangganId ??
+                      0,
+                  noInvoice: widget.produk?.first.noInvoice ?? "",
+                  keterangan: descriptionTextField.text == ""
+                      ? "Tidak Ada Keterangan"
+                      : descriptionTextField.text,
+                  products: widget.produk ?? [],
+                );
               },
               child: const Text('OK'),
             ),

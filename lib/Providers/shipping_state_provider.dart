@@ -203,6 +203,7 @@ class ShippingProvider with ChangeNotifier {
 
   Future<bool> postReturData({
     required String token,
+    required int pelangganId,
     required String noInvoice,
     required String keterangan,
     required List<Produk> products,
@@ -210,12 +211,15 @@ class ShippingProvider with ChangeNotifier {
     try {
       await ShippingService().postReturTransaction(
         token: token,
+        pelangganid: pelangganId,
         noInvoice: noInvoice,
         keterangan: keterangan,
         products: products,
       );
+      print("postReturData sukses dijalankan");
       return true;
     } catch (e) {
+      print("error dengan pesan $e");
       return false;
     }
   }

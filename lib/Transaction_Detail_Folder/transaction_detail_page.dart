@@ -168,8 +168,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         context,
                         PageTransition(
                           child: ReturPage(
-                              produk: shippingProvider
-                                  .detailTransactionData?.data?.produk),
+                            produk: shippingProvider
+                                .detailTransactionData?.data?.produk,
+                          ),
                           type: PageTransitionType.leftToRight,
                         ),
                       );

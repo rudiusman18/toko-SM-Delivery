@@ -189,6 +189,7 @@ class ShippingService {
     var response = await http.post(url, headers: header, body: body);
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       var data = jsonDecode(response.body);
+      print("postDetailDelivery: ${data}");
       return data;
     } else {
       throw Exception("Gagal melakukan postDelivery");
@@ -197,6 +198,7 @@ class ShippingService {
 
   Future<Map<String, dynamic>> postReturTransaction({
     required String token,
+    required int pelangganid,
     required String noInvoice,
     required String keterangan,
     required List<Produk> products,
@@ -208,16 +210,19 @@ class ShippingService {
     };
     Map data = {
       'no_invoice': noInvoice,
+      'pelanggan_id': pelangganid,
       'keterangan': keterangan,
       'produk': generateProducts(initProducts: products),
     };
+
+    print("isi data: ${data}");
     var body = jsonEncode(data);
     var response = await http.post(url, headers: header, body: body);
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       var data = jsonDecode(response.body);
       return data;
     } else {
-      throw Exception("Gagal melakukan postDelivery");
+      throw Exception(jsonDecode(response.body));
     }
   }
 
