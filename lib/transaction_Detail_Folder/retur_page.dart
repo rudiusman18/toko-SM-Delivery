@@ -237,55 +237,31 @@ class _ReturPageState extends State<ReturPage> {
                           ),
                           InkWell(
                             onTap: () {
-                              // if (product.multisatuanJumlah != null) {
-                              //   var jumlahTotalBarang = 0;
-
-                              //   for (var i = 0;
-                              //       i <
-                              //           (product.multisatuanJumlah?.length ??
-                              //               0);
-                              //       i++) {
-                              //     var total = (int.tryParse(
-                              //             product.multisatuanJumlah?[i] ??
-                              //                 "") ??
-                              //         0 * (product.returValue?[i] ?? 0));
-
-                              //     jumlahTotalBarang += total;
-
-                              //     print(
-                              //         "KONTOL MULTI retur : ${product.returValue?[i]}");
-                              //     print(
-                              //         "KONTOL MULTI multi: ${int.tryParse(product.multisatuanJumlah?[i] ?? "") ?? 0}");
-                              //     print("KONTOL MULTI total: $total");
-                              //   }
-
-                              //   setState(() {
-                              //     if ((jumlahTotalBarang) <=
-                              //         (product.jumlah ?? 0)) {
-                              //       product.returValue?[index] += 1;
-                              //     }
-                              //   });
-                              // } else {
-                              //   var multiSatuan = int.tryParse(
-                              //           (product.multisatuanJumlah?[index] ??
-                              //               "1")) ??
-                              //       0;
-
-                              //   int sum = product.returValue?.reduce(
-                              //           (value, element) => value + element) ??
-                              //       0;
-                              //   setState(() {
-                              //     if ((sum + multiSatuan) <=
-                              //         (product.jumlah ?? 0)) {
-                              //       product.returValue?[index] += 1;
-                              //     }
-                              //   });
-                              // }
-                            
                               setState(() {
                                 product.returValue?[index] += 1;
-                              });
+                                int totalProduct = 0;
 
+                                if (product.golonganProduk is List) {
+                                  for (int i = 0;
+                                      i <
+                                          (product.multisatuanJumlah?.length ??
+                                              0);
+                                      i++) {
+                                    totalProduct += (product.returValue?[i] ??
+                                            0) *
+                                        (int.tryParse(
+                                                "${product.multisatuanJumlah?[i]}") ??
+                                            0);
+                                  }
+                                } else {
+                                  totalProduct =
+                                      (product.returValue?[index] ?? 0);
+                                }
+
+                                if (totalProduct > (product.jumlah ?? 0)) {
+                                  product.returValue?[index] -= 1;
+                                }
+                              });
                             },
                             child: Icon(
                               SolarIconsBold.addSquare,
