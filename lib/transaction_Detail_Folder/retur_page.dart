@@ -57,7 +57,7 @@ class _ReturPageState extends State<ReturPage> {
                 backgroundColor: green,
               ),
               onPressed: () async {
-                await shippingProvider.postReturData(
+                if (await shippingProvider.postReturData(
                   token: authProvider.user.token ?? "",
                   pelangganId: shippingProvider
                           .detailTransactionData?.data?.pelangganId ??
@@ -67,7 +67,10 @@ class _ReturPageState extends State<ReturPage> {
                       ? "Tidak Ada Keterangan"
                       : descriptionTextField.text,
                   products: widget.produk ?? [],
-                );
+                )) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                }
               },
               child: const Text('OK'),
             ),

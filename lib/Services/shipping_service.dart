@@ -203,7 +203,7 @@ class ShippingService {
     required String keterangan,
     required List<Produk> products,
   }) async {
-    var url = Uri.parse("${baseURL}pengiriman/data");
+    var url = Uri.parse("${baseURL}transaksi/retur");
     var header = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json'
@@ -230,15 +230,24 @@ class ShippingService {
       {required List<Produk> initProducts}) {
     // Create a list to hold the dynamic products
     List<Map<String, dynamic>> products = [];
-
-    // Convert Product objects to Map and add them to the list
+    int sum = 0;
     for (Produk product in initProducts) {
+      if (product.golonganProduk is List) {
+        for (int i = 0; i < (product.golonganProduk.length ?? 0); i++) {
+          sum += (int.tryParse("${product.returValue?[i]}") ?? 0) *
+              (int.tryParse("${product.multisatuanJumlah?[i]}") ?? 0);
+        }
+      }
+
       products.add({
         "id": "${product.sId}",
         "produk_id": "${product.produkId}",
         "nama_produk": "${product.namaProduk}",
-        "jumlah": "${product.jumlah}",
-        "jumlah_multisatuan": product.jumlahMultisatuan
+        "jumlah": (int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
+            ? int.tryParse(("${product.returValue?[0]}"))
+            : int.tryParse("$sum"),
+        "jumlah_multisatuan":
+            (product.returValue?.length ?? 0) > 1 ? product.returValue : null
       });
     }
 
