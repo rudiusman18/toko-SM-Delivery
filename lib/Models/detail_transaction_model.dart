@@ -28,6 +28,7 @@ class Data {
   String? namaPelanggan;
   int? cabangId;
   int? kurirId;
+  int? retur;
   int? pengirimanId;
   String? namaKurir;
   int? totalHarga;
@@ -49,6 +50,7 @@ class Data {
       {this.sId,
       this.noInvoice,
       this.pelangganId,
+      this.retur,
       this.namaPelanggan,
       this.cabangId,
       this.kurirId,
@@ -73,6 +75,7 @@ class Data {
     sId = json['_id'];
     noInvoice = json['no_invoice'];
     pelangganId = json['pelanggan_id'];
+    retur = json['retur'];
     namaPelanggan = json['nama_pelanggan'];
     cabangId = json['cabang_id'];
     kurirId = json['kurir_id'];
@@ -103,6 +106,7 @@ class Data {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['_id'] = sId;
     data['no_invoice'] = noInvoice;
+    data['retur'] = retur;
     data['pelanggan_id'] = pelangganId;
     data['nama_pelanggan'] = namaPelanggan;
     data['cabang_id'] = cabangId;
@@ -132,13 +136,13 @@ class Data {
 class Produk {
   String? sId;
   String? noInvoice;
-  int? produkId;
+  dynamic produkId;
   int? cabangId;
   String? namaProduk;
   dynamic golonganProduk;
   String? imageUrl;
-  int? harga;
-  int? jumlah;
+  dynamic harga;
+  dynamic jumlah;
   String? satuanProduk;
   List<dynamic>? jumlahMultisatuan;
   List<dynamic>? multisatuanJumlah;

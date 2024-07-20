@@ -63,9 +63,7 @@ class _ReturPageState extends State<ReturPage> {
                           .detailTransactionData?.data?.pelangganId ??
                       0,
                   noInvoice: widget.produk?.first.noInvoice ?? "",
-                  keterangan: descriptionTextField.text == ""
-                      ? "Tidak Ada Keterangan"
-                      : descriptionTextField.text,
+                  keterangan: descriptionTextField.text,
                   products: widget.produk ?? [],
                 )) {
                   // ignore: use_build_context_synchronously
@@ -281,9 +279,9 @@ class _ReturPageState extends State<ReturPage> {
                           ),
                           Expanded(
                             child: Text(
-                              "${(product.jumlahMultisatuan?[index] ?? "")} (${(product.golonganProduk is List) ? (product.jumlahMultisatuan?[index]) * int.tryParse((product.multisatuanJumlah?[index])) ?? 0 : product.jumlah})",
+                              "${(product.jumlahMultisatuan?[index] ?? "")} (isi ${(product.golonganProduk is List) ? (product.jumlahMultisatuan?[index]) * int.tryParse("${(product.multisatuanJumlah?[index])}") ?? 0 : product.jumlah})",
                               style: urbanist,
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.right,
                             ),
                           ),
                         ],

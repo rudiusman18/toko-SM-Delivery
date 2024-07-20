@@ -235,7 +235,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
               ),
               type: PageTransitionType.rightToLeft,
             ),
-          );
+          ).then((_) async {
+            _getDeliveryHistory();
+          });
         },
         child: Container(
           margin: const EdgeInsets.only(left: 24, right: 24, bottom: 10),

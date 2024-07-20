@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
 import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
 import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
+import 'package:toko_sm_delivery/Models/retur_information_model.dart';
 import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
 import 'package:toko_sm_delivery/Models/success_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
@@ -246,11 +247,58 @@ class ShippingService {
         "jumlah": (int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
             ? int.tryParse(("${product.returValue?[0]}"))
             : int.tryParse("$sum"),
+        "harga": "${product.harga}",
+        "satuan_produk": "${product.satuanProduk}",
         "jumlah_multisatuan":
-            (product.returValue?.length ?? 0) > 1 ? product.returValue : null
+            (product.returValue?.length ?? 0) > 1 ? product.returValue : null,
+        "multisatuan_unit": product.multisatuanUnit,
       });
     }
 
     return products;
+  }
+
+  Future<Map<String, dynamic>> postDoneDelivery(
+      {required String token, required String noResi}) async {
+    var url = Uri.parse("${baseURL}pengiriman/selesai");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    Map data = {
+      'no_resi': noResi,
+    };
+
+    print("isi data: ${data}");
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    var result = jsonDecode(response.body);
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      return result;
+    } else {
+      throw Exception(result);
+    }
+  }
+
+  Future<ReturInformationModel> getReturInformation({
+    required String token,
+    required String noInvoice,
+  }) async {
+    var url = Uri.parse("${baseURL}transaksi/retur/$noInvoice");
+    print("url yang diakses ${"${baseURL}transaksi/retur/$noInvoice"}");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    var response = await http.get(url, headers: header);
+    // **success melakukan get retur data
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      var data = jsonDecode(response.body);
+      ReturInformationModel returInformationModel =
+          ReturInformationModel.fromJson(data);
+      return returInformationModel;
+    } else {
+      throw Exception(response.body);
+    }
   }
 }

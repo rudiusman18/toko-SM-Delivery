@@ -10,6 +10,7 @@ import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:toko_sm_delivery/bottom_tabbar.dart';
 import 'package:toko_sm_delivery/logout_page.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -80,9 +81,11 @@ class _HomePageState extends State<HomePage> {
     final shippingProvider =
         Provider.of<ShippingProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
     if (await shippingProvider.getDeliveryData(
-      date: "",
+      date: formattedDate,
       query: "",
       page: "1",
       token: authProvider.user.token.toString(),
@@ -621,7 +624,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   InkWell(
                     onTap: () {
-                      bottomTabbarProvider.selectedIndex = 2;
+                      bottomTabbarProvider.selectedIndex = 1;
                       Navigator.pushReplacement(
                           context,
                           PageTransition(
@@ -640,23 +643,35 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView(
-                children: [
-                  const SizedBox(
-                    height: 10,
+            if (shippingProvider.deliveryData?.data?.isEmpty ?? true) ...{
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Belum Ada Pengiriman",
+                    style: urbanist,
                   ),
-                  for (DeliveryData i
-                      in shippingProvider.deliveryData?.data ?? []) ...[
-                    deliveryItem(
-                      deliveryId: i.noResi.toString(),
-                      totalProduct: "${i.jumlahTransaksi} transaksi",
-                      time: "${i.time} WIB",
-                    ),
-                  ],
-                ],
+                ),
               ),
-            ),
+            } else ...{
+              Expanded(
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    for (DeliveryData i
+                        in shippingProvider.deliveryData?.data ?? []) ...[
+                      deliveryItem(
+                        deliveryId: i.noResi.toString(),
+                        totalProduct: "${i.jumlahTransaksi} transaksi",
+                        time: "${i.time} WIB",
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            },
           ],
         ),
       ),

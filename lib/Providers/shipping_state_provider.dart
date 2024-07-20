@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
 import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
 import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
@@ -7,6 +6,8 @@ import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
 import 'package:toko_sm_delivery/Models/success_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
 import 'package:toko_sm_delivery/Services/shipping_service.dart';
+
+import '../Models/retur_information_model.dart';
 
 class ShippingProvider with ChangeNotifier {
   // Shipping Home State Model
@@ -220,6 +221,46 @@ class ShippingProvider with ChangeNotifier {
       return true;
     } catch (e) {
       print("error dengan pesan $e");
+      return false;
+    }
+  }
+
+  Future<bool> postDoneDelivery({
+    required String token,
+    required String noResi,
+  }) async {
+    try {
+      await ShippingService().postDoneDelivery(token: token, noResi: noResi);
+      return true;
+    } catch (e) {
+      print("Done delivery gagal dengan pesan: $e");
+      return false;
+    }
+  }
+
+  ReturInformationModel? _returInformationModel;
+
+  ReturInformationModel? get returInformationModel => _returInformationModel;
+
+  set returInformationModel(ReturInformationModel? returData) {
+    _returInformationModel = returData;
+    notifyListeners();
+  }
+
+  Future<bool> getReturInformation({
+    required String token,
+    required String noInvoice,
+  }) async {
+    print("invoice shippinh provider: ${noInvoice}");
+    try {
+      ReturInformationModel datareturInformationModel = await ShippingService()
+          .getReturInformation(token: token, noInvoice: noInvoice);
+      print(
+          "get retur information ${(returInformationModel?.data?.produk ?? []).length}");
+      returInformationModel = datareturInformationModel;
+      return true;
+    } catch (e) {
+      print("ge retur Error dengan pesan $e");
       return false;
     }
   }

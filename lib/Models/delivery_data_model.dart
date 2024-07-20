@@ -9,14 +9,14 @@ class DeliveryDataModel {
     if (json['data'] != null) {
       data = <DeliveryData>[];
       json['data'].forEach((v) {
-        data!.add(new DeliveryData.fromJson(v));
+        data!.add(DeliveryData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -56,15 +56,15 @@ class DeliveryData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['no_resi'] = this.noResi;
-    data['no_invoice'] = this.noInvoice;
-    data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['jumlah_transaksi'] = this.jumlahTransaksi;
-    data['date'] = this.date;
-    data['time'] = this.time;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['no_resi'] = noResi;
+    data['no_invoice'] = noInvoice;
+    data['status'] = status;
+    data['created_at'] = createdAt;
+    data['jumlah_transaksi'] = jumlahTransaksi;
+    data['date'] = date;
+    data['time'] = time;
     return data;
   }
 }

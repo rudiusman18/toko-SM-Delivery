@@ -25,9 +25,9 @@ class _BottomTabbarState extends State<BottomTabbar> {
         case 0:
           return const HomePage();
         case 1:
-          return const TransactionPage();
-        case 2:
           return const DeliveryPage();
+        case 2:
+          return const TransactionPage();
         default:
           return const HomePage();
       }
@@ -54,15 +54,15 @@ class _BottomTabbarState extends State<BottomTabbar> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                SolarIconsOutline.billList,
-              ),
-              label: "Transaksi",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
                 SolarIconsOutline.boxMinimalistic,
               ),
               label: "Pengiriman",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                SolarIconsOutline.billList,
+              ),
+              label: "Transaksi",
             ),
           ]),
     );

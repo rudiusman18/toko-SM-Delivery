@@ -5,6 +5,7 @@ import 'package:solar_icons/solar_icons.dart';
 import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
+import 'package:toko_sm_delivery/transaction_Detail_Folder/retur_information_page.dart';
 import 'package:toko_sm_delivery/transaction_Detail_Folder/retur_page.dart';
 
 class TransactionDetailPage extends StatefulWidget {
@@ -127,7 +128,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           builder: (BuildContext context) {
             return Container(
               padding: const EdgeInsets.all(20),
-              height: 150,
+              height: shippingProvider
+                          .detailTransactionData?.data?.metodePembayaran
+                          ?.toLowerCase() ==
+                      "cod"
+                  ? 150
+                  : 120,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(
@@ -163,20 +169,38 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          child: ReturPage(
-                            produk: shippingProvider
-                                .detailTransactionData?.data?.produk,
+                      if (shippingProvider.detailTransactionData?.data?.retur ==
+                          null) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            child: ReturPage(
+                              produk: shippingProvider
+                                  .detailTransactionData?.data?.produk,
+                            ),
+                            type: PageTransitionType.leftToRight,
                           ),
-                          type: PageTransitionType.leftToRight,
-                        ),
-                      );
+                        ).then((_) => _TransactionDetailPageState());
+                      } else {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const ReturInformationPage(),
+                            type: PageTransitionType.rightToLeft,
+                          ),
+                        );
+                      }
                     },
                     child: Text(
-                      "Ajukan Retur",
+                      shippingProvider.detailTransactionData?.data?.retur ==
+                                  0 ||
+                              shippingProvider
+                                      .detailTransactionData?.data?.retur ==
+                                  1
+                          ? "Informasi Retur"
+                          : "Ajukan Retur",
                       style: urbanist.copyWith(
                         color: green,
                         fontWeight: bold,
@@ -184,113 +208,123 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ),
-                          ),
-                          title: Text(
-                            "Ubah Metode Pembayaran",
-                            style: urbanist.copyWith(
-                              fontWeight: bold,
-                            ),
-                          ),
-                          content: StatefulBuilder(
-                            builder: (BuildContext context,
-                                StateSetter stateSetter) {
-                              return Container(
-                                width: double
-                                    .infinity, // Set the desired width here
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                ), // Optional padding for better appearance
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withAlpha(90),
-                                      width: 1), // Optional border styling
-                                  borderRadius: BorderRadius.circular(
-                                      5), // Optional border radius
-                                ),
-                                child: DropdownButton<String>(
-                                  value: selecteditem, // Current selected item
-                                  isExpanded:
-                                      true, // Make the dropdown expand to the width of the container
-                                  hint: const Text(
-                                      'Select an item'), // Hint text when no item is selected
-                                  items: lsitSelectedItem.map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: urbanist,
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    stateSetter(() {
-                                      selecteditem = newValue ??
-                                          ""; // Update the selected item
-                                    });
-                                  },
-                                  underline:
-                                      const SizedBox(), // Remove the default underline
-                                ),
-                              );
-                            },
-                          ),
-                          actions: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
+                  if (shippingProvider
+                          .detailTransactionData?.data?.metodePembayaran
+                          ?.toLowerCase() ==
+                      "cod") ...{
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                10,
                               ),
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Batal'),
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: green,
+                            title: Text(
+                              "Ubah Metode Pembayaran",
+                              style: urbanist.copyWith(
+                                fontWeight: bold,
                               ),
-                              onPressed: () async {
-                                var data = {
-                                  "no_invoice": widget.resiId,
-                                  "metode_pembayaran":
-                                      selecteditem.toLowerCase()
-                                };
-                                if (await shippingProvider.postPaymentData(
-                                    data: data,
-                                    token:
-                                        authProvider.user.token.toString())) {
-                                  Navigator.pop(context);
-                                  print("Post data success");
-                                } else {
-                                  Navigator.pop(context);
-                                  print("Data gagal");
-                                }
+                            ),
+                            content: StatefulBuilder(
+                              builder: (BuildContext context,
+                                  StateSetter stateSetter) {
+                                return Container(
+                                  width: double
+                                      .infinity, // Set the desired width here
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ), // Optional padding for better appearance
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.grey.withAlpha(90),
+                                        width: 1), // Optional border styling
+                                    borderRadius: BorderRadius.circular(
+                                        5), // Optional border radius
+                                  ),
+                                  child: DropdownButton<String>(
+                                    value:
+                                        selecteditem, // Current selected item
+                                    isExpanded:
+                                        true, // Make the dropdown expand to the width of the container
+                                    hint: const Text(
+                                        'Select an item'), // Hint text when no item is selected
+                                    items: lsitSelectedItem.map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: urbanist,
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      stateSetter(() {
+                                        selecteditem = newValue ??
+                                            ""; // Update the selected item
+                                      });
+                                    },
+                                    underline:
+                                        const SizedBox(), // Remove the default underline
+                                  ),
+                                );
                               },
-                              child: const Text('OK'),
                             ),
-                          ],
+                            actions: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                ),
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Batal'),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: green,
+                                ),
+                                onPressed: () async {
+                                  var data = {
+                                    "no_invoice": widget.resiId,
+                                    "metode_pembayaran":
+                                        selecteditem.toLowerCase() == "hutang"
+                                            ? "kredit"
+                                            : selecteditem.toLowerCase()
+                                  };
+                                  if (await shippingProvider.postPaymentData(
+                                      data: data,
+                                      token:
+                                          authProvider.user.token.toString())) {
+                                    Navigator.pop(context);
+                                    _getDetailDelivery();
+                                    print("Post data success");
+                                  } else {
+                                    Navigator.pop(context);
+                                    print("Data gagal");
+                                  }
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Ubah Metode Pembayaran",
+                        style: urbanist.copyWith(
+                          color: green,
+                          fontWeight: bold,
+                          fontSize: 16,
                         ),
-                      );
-                    },
-                    child: Text(
-                      "Ubah Metode Pembayaran",
-                      style: urbanist.copyWith(
-                        color: green,
-                        fontWeight: bold,
-                        fontSize: 16,
                       ),
-                    ),
-                  )
+                    )
+                  }
                 ],
               ),
             );
@@ -381,6 +415,115 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         ),
         child: ListView(
           children: [
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  height: 15,
+                ),
+                Expanded(
+                  child: Text(
+                    "No Invoice",
+                    style: urbanist,
+                  ),
+                ),
+                Text(
+                  "${shippingProvider.detailTransactionData?.data?.noInvoice}",
+                  style: urbanist.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Nama Pelanggan",
+                    style: urbanist,
+                  ),
+                ),
+                Text(
+                  "${shippingProvider.detailTransactionData?.data?.namaPelanggan}",
+                  style: urbanist.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Total belanja",
+                    style: urbanist,
+                  ),
+                ),
+                Text(
+                  "Rp ${shippingProvider.detailTransactionData?.data?.totalBelanja}",
+                  style: urbanist.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Metode Pembayaran",
+                    style: urbanist,
+                  ),
+                ),
+                Text(
+                  "${shippingProvider.detailTransactionData?.data?.metodePembayaran == "kredit" ? "hutang" : shippingProvider.detailTransactionData?.data?.metodePembayaran}",
+                  style: urbanist.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            if (shippingProvider.detailTransactionData?.data?.retur !=
+                null) ...{
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Retur",
+                      style: urbanist.copyWith(
+                        color: yellow,
+                        fontWeight: bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    shippingProvider.detailTransactionData?.data?.retur == 0
+                        ? "Menunggu Konfirmasi"
+                        : "Disetujui",
+                    style: urbanist.copyWith(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            },
+            const SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -391,6 +534,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     fontSize: 18,
                     fontWeight: semiBold,
                   ),
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -495,15 +641,22 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: green,
+                      backgroundColor:
+                          shippingProvider.detailTransactionData?.data?.retur !=
+                                  0
+                              ? green
+                              : Colors.grey,
                       shadowColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      _modalDialog(
-                        title: "Konfirmasi Status",
-                        messages:
-                            "Anda yakin ingin mengubah status pesanan menjadi Diterima?",
-                      );
+                      if (shippingProvider.detailTransactionData?.data?.retur !=
+                          0) {
+                        _modalDialog(
+                          title: "Konfirmasi Status",
+                          messages:
+                              "Anda yakin ingin mengubah status pesanan menjadi Diterima?",
+                        );
+                      }
                     },
                     child: Text(
                       "Pesanan Diterima",

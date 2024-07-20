@@ -103,15 +103,27 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 backgroundColor: green,
               ),
               onPressed: () async {
-                await shippingProvider.postDeliveryData(
-                  token: authProvider.user.token ?? "",
-                  noResi:
-                      shippingProvider.detailDeliveryData?.data?.noResi ?? "",
-                  status: 1,
-                  golongan: mapGolongan,
-                );
+                if (shippingProvider.detailDeliveryData?.data?.status == 1) {
+                  await shippingProvider.postDoneDelivery(
+                    token: authProvider.user.token ?? "",
+                    noResi:
+                        shippingProvider.detailDeliveryData?.data?.noResi ?? "",
+                  );
+                } else {
+                  await shippingProvider.postDeliveryData(
+                    token: authProvider.user.token ?? "",
+                    noResi:
+                        shippingProvider.detailDeliveryData?.data?.noResi ?? "",
+                    status: 1,
+                    golongan: mapGolongan,
+                  );
+                }
+
                 Navigator.pop(context);
-                Navigator.pop(context);
+                if (shippingProvider.detailDeliveryData?.data?.status == 1) {
+                  Navigator.pop(context);
+                }
+                _getDetailDelivery();
               },
               child: const Text('OK'),
             ),
@@ -264,13 +276,16 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    product[i].checked = !product[i].checked!;
-                    mapGolongan[golongan]?[i] = product[i].checked ?? false;
+                    if (shippingProvider.detailDeliveryData?.data?.status ==
+                        0) {
+                      product[i].checked = !product[i].checked!;
+                      mapGolongan[golongan]?[i] = product[i].checked ?? false;
 
-                    print(
-                        "isi mapgolongan njing: ${mapGolongan} dengan golongan $golongan");
-                    print("isi produk nya adalah: ${product[i].checked}");
-                    print("isi produk nya adalah: ${product[i].toJson()}");
+                      print(
+                          "isi mapgolongan njing: ${mapGolongan} dengan golongan $golongan");
+                      print("isi produk nya adalah: ${product[i].checked}");
+                      print("isi produk nya adalah: ${product[i].toJson()}");
+                    }
                   });
                 },
                 child: Container(
@@ -293,15 +308,19 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       InkWell(
                         onTap: () {
                           setState(() {
-                            product[i].checked = !product[i].checked!;
-                            mapGolongan[golongan]?[i] =
-                                product[i].checked ?? false;
+                            if (shippingProvider
+                                    .detailDeliveryData?.data?.status ==
+                                0) {
+                              product[i].checked = !product[i].checked!;
+                              mapGolongan[golongan]?[i] =
+                                  product[i].checked ?? false;
 
-                            print("isi mapgolongan njing: ${mapGolongan}");
-                            print(
-                                "isi produk nya adalah: ${product[i].checked}");
-                            print(
-                                "isi produk nya adalah: ${product[i].toJson()}");
+                              print("isi mapgolongan njing: ${mapGolongan}");
+                              print(
+                                  "isi produk nya adalah: ${product[i].checked}");
+                              print(
+                                  "isi produk nya adalah: ${product[i].toJson()}");
+                            }
                           });
                         },
                         child: Container(
@@ -400,6 +419,16 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                 index: i,
               ),
             ],
+            Text(
+              "Golongan",
+              style: urbanist.copyWith(
+                fontSize: 18,
+                fontWeight: semiBold,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             if (shippingProvider.detailDeliveryData != null) ...[
               for (var data
                   in (shippingProvider.detailDeliveryData?.data?.golongan ??
@@ -415,6 +444,8 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       );
     }
 
+    print(
+        "statusnya saat ini adalah ${shippingProvider.detailDeliveryData?.data?.status}");
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -428,62 +459,70 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
               margin: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        side: BorderSide(
-                          color: green,
-                          width: 1,
-                        ), // Border color
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () async {
-                        await shippingProvider.postDeliveryData(
-                          token: authProvider.user.token ?? "",
-                          noResi: shippingProvider
-                                  .detailDeliveryData?.data?.noResi ??
-                              "",
-                          status: 0,
-                          golongan: mapGolongan,
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "Simpan Checklist",
-                        style: urbanist.copyWith(
-                          color: green,
-                          fontWeight: semiBold,
+                  if (shippingProvider.detailDeliveryData?.data?.status ==
+                      0) ...{
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          side: BorderSide(
+                            color: green,
+                            width: 1,
+                          ), // Border color
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                        ),
+                        onPressed: () async {
+                          await shippingProvider.postDeliveryData(
+                            token: authProvider.user.token ?? "",
+                            noResi: shippingProvider
+                                    .detailDeliveryData?.data?.noResi ??
+                                "",
+                            status: 0,
+                            golongan: mapGolongan,
+                          );
+                          setState(() {});
+                        },
+                        child: Text(
+                          "Simpan Checklist",
+                          style: urbanist.copyWith(
+                            color: green,
+                            fontWeight: semiBold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: green,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        print("proses dikirim ditekan");
-                        _modalDialog(
-                          title: "Konfirmasi Status",
-                          messages:
-                              "Anda yakin ingin mengubah status menjadi Dikirim?",
-                        );
-                      },
-                      child: Text(
-                        "Proses Untuk Dikirim",
-                        style: urbanist.copyWith(
-                          color: Colors.white,
-                          fontWeight: semiBold,
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  },
+                  if (shippingProvider.detailDeliveryData?.data?.status !=
+                      2) ...{
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: green,
+                          shadowColor: Colors.transparent,
+                        ),
+                        onPressed: () {
+                          print("proses dikirim ditekan");
+                          _modalDialog(
+                            title: "Konfirmasi Status",
+                            messages:
+                                "Anda yakin ingin mengubah status menjadi Dikirim?",
+                          );
+                        },
+                        child: Text(
+                          shippingProvider.detailDeliveryData?.data?.status == 1
+                              ? "Selesai"
+                              : "Proses Untuk Dikirim",
+                          style: urbanist.copyWith(
+                            color: Colors.white,
+                            fontWeight: semiBold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  },
                 ],
               ),
             ),

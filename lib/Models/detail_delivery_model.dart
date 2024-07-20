@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_collection_literals
+
 class DetailDeliveryModel {
   String? message;
   Data? data;
@@ -6,12 +8,12 @@ class DetailDeliveryModel {
 
   DetailDeliveryModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -21,6 +23,7 @@ class DetailDeliveryModel {
 
 class Data {
   String? noResi;
+  int? status;
   List<Transaksi>? transaksi;
   List<Golongan>? golongan;
 
@@ -28,28 +31,30 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     noResi = json['no_resi'];
+    status = json['status'];
     if (json['transaksi'] != null) {
       transaksi = <Transaksi>[];
       json['transaksi'].forEach((v) {
-        transaksi!.add(new Transaksi.fromJson(v));
+        transaksi!.add(Transaksi.fromJson(v));
       });
     }
     if (json['golongan'] != null) {
       golongan = <Golongan>[];
       json['golongan'].forEach((v) {
-        golongan!.add(new Golongan.fromJson(v));
+        golongan!.add(Golongan.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['no_resi'] = this.noResi;
-    if (this.transaksi != null) {
-      data['transaksi'] = this.transaksi!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['no_resi'] = noResi;
+    data['status'] = status;
+    if (transaksi != null) {
+      data['transaksi'] = transaksi!.map((v) => v.toJson()).toList();
     }
-    if (this.golongan != null) {
-      data['golongan'] = this.golongan!.map((v) => v.toJson()).toList();
+    if (golongan != null) {
+      data['golongan'] = golongan!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -84,14 +89,14 @@ class Transaksi {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['no_invoice'] = this.noInvoice;
-    data['nama_pelanggan'] = this.namaPelanggan;
-    data['jumlah_produk'] = this.jumlahProduk;
-    data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['date'] = this.date;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['_id'] = sId;
+    data['no_invoice'] = noInvoice;
+    data['nama_pelanggan'] = namaPelanggan;
+    data['jumlah_produk'] = jumlahProduk;
+    data['status'] = status;
+    data['created_at'] = createdAt;
+    data['date'] = date;
     return data;
   }
 }
@@ -107,14 +112,14 @@ class Golongan {
     if (json['data'] != null) {
       data = <GolData>[];
       json['data'].forEach((v) {
-        data!.add(new GolData.fromJson(v));
+        data!.add(GolData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['label'] = this.label;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['label'] = label;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -138,11 +143,11 @@ class GolData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nama_produk'] = this.namaProduk;
-    data['satuan'] = this.satuan;
-    data['jumlah'] = this.jumlah;
-    data['checked'] = this.checked;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['nama_produk'] = namaProduk;
+    data['satuan'] = satuan;
+    data['jumlah'] = jumlah;
+    data['checked'] = checked;
     return data;
   }
 }
