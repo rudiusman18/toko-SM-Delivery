@@ -21,6 +21,7 @@ void main() {
         ),
       ],
       child: MaterialApp(
+        title: "Toko SM Delivery",
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
