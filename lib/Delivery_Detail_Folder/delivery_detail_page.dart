@@ -298,8 +298,12 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           style: urbanist,
                         ),
                       ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text("Revisi"),
+                      ),
                       Text(
-                        "${product?[i].jumlah} Pcs",
+                        "${product?[i].jumlah} ${product?[i].satuan}",
                         style: urbanist,
                       ),
                       const SizedBox(

@@ -9,6 +9,7 @@ import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:toko_sm_delivery/logout_page.dart';
 
 class DeliveryPage extends StatefulWidget {
   const DeliveryPage({super.key});
@@ -25,6 +26,8 @@ class _DeliveryPageState extends State<DeliveryPage> {
   // DatePicker
   String _selectedDate = '';
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,9 +36,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
   }
 
   void _getDeliveryHistory() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
+    setState(() {
+      isLoading = true;
+    });
 
     final shippingProvider =
         Provider.of<ShippingProvider>(context, listen: false);
@@ -49,15 +52,20 @@ class _DeliveryPageState extends State<DeliveryPage> {
       token: authProvider.user.token.toString(),
     )) {
       print(
-          "Get data success ${shippingProvider.shippingState?.data.toString()}");
+          "Get data success ${shippingProvider.shippingState?.data.toString()} dengan $_selectedDate, ${searchTextFieldController.text}, ${authProvider.user.token.toString()}");
     } else {
       print("Data gagal");
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     // ignore: no_leading_underscores_for_local_identifiers
     void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -126,6 +134,81 @@ class _DeliveryPageState extends State<DeliveryPage> {
               ),
             );
           });
+    }
+
+    Widget header() {
+      return Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 24,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: 50,
+              height: 60,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black,
+              ),
+              child: Text(
+                "UI",
+                style: urbanist.copyWith(
+                  color: Colors.white,
+                  fontWeight: bold,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  authProvider.user.data.namaLengkap.toString(),
+                  style: urbanist.copyWith(
+                    fontSize: 16,
+                    fontWeight: semiBold,
+                  ),
+                ),
+                Row(
+                  children: [
+                    const Icon(
+                      SolarIconsOutline.mapPoint,
+                      size: 15,
+                    ),
+                    Text(
+                      "Cabang ${authProvider.user.data.namaCabang}",
+                      style: urbanist.copyWith(
+                        fontSize: 12,
+                        fontWeight: light,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                      child: const LogoutPage(),
+                      type: PageTransitionType.rightToLeft,
+                    ));
+              },
+              child: const Icon(
+                SolarIconsBold.user,
+                size: 35,
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     Widget searchBar() {
@@ -337,20 +420,49 @@ class _DeliveryPageState extends State<DeliveryPage> {
       body: SafeArea(
         child: Column(
           children: [
+            if (authProvider.user.data.kategori?.toLowerCase() ==
+                "checker") ...{
+              SizedBox(
+                height: 20,
+              ),
+              header(),
+            },
             searchBar(),
             Expanded(
-              child: ListView(
-                children: [
-                  for (DeliveryData i
-                      in shippingProvider.deliveryData?.data ?? []) ...[
-                    deliveryItem(
-                      deliveryId: i.noResi.toString(),
-                      totalProduct: "${i.jumlahTransaksi} Transaksi",
-                      date: i.date.toString(),
-                      status: i.status.toString(),
-                    ),
-                  ],
-                ],
+              child: RefreshIndicator(
+                color: green,
+                onRefresh: () async {
+                  _getDeliveryHistory();
+                },
+                child: isLoading
+                    ? CircularProgressIndicator(
+                        color: green,
+                      )
+                    : ListView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        children: [
+                          if ((shippingProvider.deliveryData?.data ?? [])
+                              .isEmpty) ...{
+                            Center(
+                              child: Text(
+                                "data tidak ditemukan",
+                                style: urbanist,
+                              ),
+                            ),
+                          } else ...{
+                            for (DeliveryData i
+                                in shippingProvider.deliveryData?.data ??
+                                    []) ...[
+                              deliveryItem(
+                                deliveryId: i.noResi.toString(),
+                                totalProduct: "${i.jumlahTransaksi} Transaksi",
+                                date: i.date.toString(),
+                                status: i.status.toString(),
+                              ),
+                            ],
+                          },
+                        ],
+                      ),
               ),
             )
           ],

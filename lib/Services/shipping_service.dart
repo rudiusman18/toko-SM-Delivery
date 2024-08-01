@@ -90,9 +90,9 @@ class ShippingService {
     };
     var response = await http.get(url, headers: header);
     // ignore: avoid_print
-    print("State Data By Time: ${url}");
-    print("State Data By Time: ${response.body}");
-    // **success melakukan login
+    print("State Data By Time url: ${url}");
+    // print("State Data By Time: ${response.body}");
+    // **success melakukan detail delivery
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       var data = jsonDecode(response.body);
       DetailDeliveryModel storeLocateModel = DetailDeliveryModel.fromJson(data);

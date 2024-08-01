@@ -27,7 +27,7 @@ class ShippingProvider with ChangeNotifier {
     try {
       ShippingStateModel data =
           await ShippingService().getStateDataByTime(time: time, token: token);
-      shippingState = data; // Set data
+      _shippingState = data; // Set data
       print("Store Location :  ${data.data.toString()}");
       return true;
     } catch (e) {
@@ -84,7 +84,7 @@ class ShippingProvider with ChangeNotifier {
     try {
       DeliveryDataModel data = await ShippingService()
           .getDeliveryData(query: query, page: page, date: date, token: token);
-      deliveryData = data; // Set data
+      _deliveryData = data; // Set data
       print("Store Location :  ${data.data.toString()}");
       return true;
     } catch (e) {

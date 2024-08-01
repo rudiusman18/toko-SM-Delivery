@@ -6,6 +6,7 @@ import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
 import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
+import 'package:toko_sm_delivery/Utils/loading.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:toko_sm_delivery/bottom_tabbar.dart';
@@ -21,6 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var filterSelectedIndex = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -32,9 +34,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getTransactionHistoryByTime() async {
-    // setState(() {
-    //   isLoading = true;
-    // });
+    setState(() {
+      isLoading = true;
+    });
 
     var time = "all";
     final shippingProvider =
@@ -75,6 +77,10 @@ class _HomePageState extends State<HomePage> {
     } else {
       print("Data gagal");
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _getDeliveryHistory() async {
@@ -83,6 +89,10 @@ class _HomePageState extends State<HomePage> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
+    setState(() {
+      isLoading = true;
+    });
 
     if (await shippingProvider.getDeliveryData(
       date: formattedDate,
@@ -95,6 +105,10 @@ class _HomePageState extends State<HomePage> {
     } else {
       print("Data gagal");
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -580,99 +594,121 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            header(),
-            const SizedBox(
-              height: 30,
-            ),
-            filter(),
-            const SizedBox(
-              height: 20,
-            ),
-            report(
-              prosesPengirimanValue:
-                  "${shippingProvider.shippingState?.data!.proses!.pengiriman ?? 0}",
-              prossesTransaksiValue:
-                  "${shippingProvider.shippingState?.data!.proses!.transaksi ?? 0}",
-              selesaPengirimanValue:
-                  "${shippingProvider.shippingState?.data!.selesai!.pengiriman ?? 0}",
-              selesaiTransaksiValue:
-                  "${shippingProvider.shippingState?.data!.selesai!.transaksi ?? 0}",
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              margin: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                bottom: 10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: RefreshIndicator(
+          color: green,
+          onRefresh: () async {
+            _getTransactionHistoryByTime();
+            _getDeliveryHistory();
+          },
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: MediaQuery.sizeOf(context).height - 90,
+              child: Stack(
                 children: [
-                  Text(
-                    "Pengiriman Hari Ini",
-                    style: urbanist.copyWith(
-                      fontSize: 16,
-                      fontWeight: semiBold,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      bottomTabbarProvider.selectedIndex = 1;
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                            child: const BottomTabbar(),
-                            type: PageTransitionType.leftToRight,
-                          ));
-                    },
-                    child: Text(
-                      "Lihat Semua",
-                      style: urbanist.copyWith(
-                        fontSize: 16,
-                        color: green,
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
+                      header(),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      filter(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      report(
+                        prosesPengirimanValue:
+                            "${shippingProvider.shippingState?.data!.proses!.pengiriman ?? 0}",
+                        prossesTransaksiValue:
+                            "${shippingProvider.shippingState?.data!.proses!.transaksi ?? 0}",
+                        selesaPengirimanValue:
+                            "${shippingProvider.shippingState?.data!.selesai!.pengiriman ?? 0}",
+                        selesaiTransaksiValue:
+                            "${shippingProvider.shippingState?.data!.selesai!.transaksi ?? 0}",
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 10,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Pengiriman Hari Ini",
+                              style: urbanist.copyWith(
+                                fontSize: 16,
+                                fontWeight: semiBold,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                bottomTabbarProvider.selectedIndex = 1;
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                      child: const BottomTabbar(),
+                                      type: PageTransitionType.leftToRight,
+                                    ));
+                              },
+                              child: Text(
+                                "Lihat Semua",
+                                style: urbanist.copyWith(
+                                  fontSize: 16,
+                                  color: green,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (shippingProvider.deliveryData?.data?.isEmpty ??
+                          true) ...{
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Belum Ada Pengiriman",
+                              style: urbanist,
+                            ),
+                          ),
+                        ),
+                      } else ...{
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              for (DeliveryData i
+                                  in shippingProvider.deliveryData?.data ??
+                                      []) ...[
+                                deliveryItem(
+                                  deliveryId: i.noResi.toString(),
+                                  totalProduct:
+                                      "${i.jumlahTransaksi} transaksi",
+                                  time: "${i.time} WIB",
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      },
+                    ],
                   ),
+                  isLoading ? Loading() : SizedBox(),
                 ],
               ),
             ),
-            if (shippingProvider.deliveryData?.data?.isEmpty ?? true) ...{
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Belum Ada Pengiriman",
-                    style: urbanist,
-                  ),
-                ),
-              ),
-            } else ...{
-              Expanded(
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    for (DeliveryData i
-                        in shippingProvider.deliveryData?.data ?? []) ...[
-                      deliveryItem(
-                        deliveryId: i.noResi.toString(),
-                        totalProduct: "${i.jumlahTransaksi} transaksi",
-                        time: "${i.time} WIB",
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            },
-          ],
+          ),
         ),
       ),
     );

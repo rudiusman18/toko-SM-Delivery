@@ -351,19 +351,26 @@ class _TransactionPageState extends State<TransactionPage> {
           children: [
             searchBar(),
             Expanded(
-                child: ListView(
-              children: [
-                for (TransactionData i
-                    in shippingProvider.transactionData?.data ?? []) ...[
-                  transactionItem(
-                    name: i.namaPelanggan.toString(),
-                    invoice: i.noInvoice.toString(),
-                    totalProduct: "${i.jumlahProduk} Transaksi",
-                    date: i.date.toString(),
-                    status: i.status.toString(),
-                  ),
+                child: RefreshIndicator(
+              color: green,
+              onRefresh: () async {
+                _getTransactionHistory();
+              },
+              child: ListView(
+                physics: AlwaysScrollableScrollPhysics(),
+                children: [
+                  for (TransactionData i
+                      in shippingProvider.transactionData?.data ?? []) ...[
+                    transactionItem(
+                      name: i.namaPelanggan.toString(),
+                      invoice: i.noInvoice.toString(),
+                      totalProduct: "${i.jumlahProduk} Transaksi",
+                      date: i.date.toString(),
+                      status: i.status.toString(),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             )),
           ],
         ),

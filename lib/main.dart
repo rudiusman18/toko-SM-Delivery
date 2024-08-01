@@ -5,6 +5,7 @@ import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
 import "package:toko_sm_delivery/Providers/shipping_state_provider.dart";
 import "package:toko_sm_delivery/login_page.dart";
 import 'package:flutter_localizations/flutter_localizations.dart';
+import "package:toko_sm_delivery/splash_page.dart";
 
 void main() {
   runApp(
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: LoginPage(),
+      body: SplashPage(),
     );
   }
 }

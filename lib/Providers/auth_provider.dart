@@ -7,7 +7,7 @@ import 'package:toko_sm_delivery/Services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
   // Login Model
-  late UserModel _user;
+  UserModel _user = UserModel(data: Data(gudangId: "", foto: "", roles: ""));
 
   UserModel get user => _user;
 
@@ -68,16 +68,6 @@ class AuthProvider with ChangeNotifier {
     } else {
       return null;
     }
-  }
-
-  // Profile Model
-  late UserModel _profile;
-
-  UserModel get profile => _profile;
-
-  set profile(UserModel profile) {
-    _profile = profile;
-    notifyListeners();
   }
 
   // Get Proflie

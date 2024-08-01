@@ -3,6 +3,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solar_icons/solar_icons.dart';
+import 'package:toko_sm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
 import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 import 'package:toko_sm_delivery/bottom_tabbar.dart';
@@ -22,59 +23,38 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController(text: "");
   FocusNode passwordFocusNode = FocusNode();
 
-  @override
-  void initState() {
-    super.initState();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-
-    Future.delayed(const Duration(seconds: 1), () async {
-      var data = await authProvider.getLoginData();
-      if (context.mounted) {
-        if (data?.token != null) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              PageTransition(
-                child: const BottomTabbar(),
-                type: PageTransitionType.rightToLeft,
-              ),
-              (route) => false);
-        } else {}
-      }
-    });
-  }
+  // Loading
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     handleSignIn() async {
-      // setState(() {
-      //   isLoading = true;
-      // });
+      setState(() {
+        isLoading = true;
+      });
       if (await authProvider.kurirLogin(
         email: emailTextController.text,
         password: passwordTextController.text,
       )) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var getData = prefs.getString("data");
-
         if (context.mounted) {
-          // setState(() {
-          //   isLoading = false;
-          // });
+          setState(() {
+            isLoading = false;
+          });
           Navigator.pushAndRemoveUntil(
               context,
               PageTransition(
-                child: const BottomTabbar(),
+                child: BottomTabbar(),
                 type: PageTransitionType.rightToLeft,
               ),
               (route) => false);
         }
       } else {
         if (context.mounted) {
-          // setState(() {
-          //   isLoading = false;
-          // });
+          setState(() {
+            isLoading = false;
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.red,
@@ -222,12 +202,20 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   handleSignIn();
                 },
-                child: Text(
-                  "Login",
-                  style: urbanist.copyWith(
-                    fontWeight: bold,
-                  ),
-                ),
+                child: isLoading
+                    ? Container(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        "Login",
+                        style: urbanist.copyWith(
+                          fontWeight: bold,
+                        ),
+                      ),
               ),
             )
           ],
