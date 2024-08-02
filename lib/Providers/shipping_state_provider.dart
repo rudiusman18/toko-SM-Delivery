@@ -264,4 +264,29 @@ class ShippingProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> postCheckRevision({
+    required String token,
+    required String noResi,
+    required String noInvoice,
+    required int productId,
+    required int jumlah,
+    required String satuan,
+    required String golongan,
+  }) async {
+    try {
+      var data = await ShippingService().postCheckRevision(
+          token: token,
+          noResi: noResi,
+          noInvoice: noInvoice,
+          productId: productId,
+          jumlah: jumlah,
+          satuan: satuan,
+          golongan: golongan);
+      print("cek revisi $data");
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

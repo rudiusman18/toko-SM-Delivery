@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:solar_icons/solar_icons.dart';
 import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
 import 'package:toko_sm_delivery/Providers/auth_provider.dart';
 import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
+import 'package:toko_sm_delivery/Utils/loading.dart';
 import 'package:toko_sm_delivery/Utils/theme.dart';
 
 class DeliveryDetailPage extends StatefulWidget {
@@ -15,6 +17,8 @@ class DeliveryDetailPage extends StatefulWidget {
 
 class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
   Map<String, List<bool>> mapGolongan = {};
+  String selectedInvoice = "";
+  bool revisiisLoading = false;
 
   @override
   void initState() {
@@ -217,7 +221,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
 
     Future<void> revisiModalDialog({
       required String noResi,
-      required String noInvoice,
+      required List<String> noInvoice,
       required String namaProduk,
       required int produkId,
       required int jumlah,
@@ -228,29 +232,153 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Revisi Jumlah Produk'),
-            content: Column(
-              children: [Text("")],
+            title: Text(
+              'Revisi \"$namaProduk\"',
+              style: urbanist.copyWith(
+                fontWeight: bold,
+              ),
+            ),
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter stateSetter) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: DropdownButton<String>(
+                        value: selectedInvoice == ""
+                            ? noInvoice.first
+                            : selectedInvoice, // Current selected item
+                        isExpanded:
+                            true, // Make the dropdown expand to the width of the container
+                        hint: const Text(
+                            'Select an item'), // Hint text when no item is selected
+                        items: noInvoice.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: urbanist,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          stateSetter(() {
+                            selectedInvoice =
+                                newValue ?? ""; // Update the selected item
+                          });
+                        },
+                        underline:
+                            const SizedBox(), // Remove the default underline
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Jumlah $satuan",
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                stateSetter(() {
+                                  if (jumlah > 0) {
+                                    jumlah -= 1;
+                                  }
+                                });
+                              },
+                              child: const Icon(
+                                SolarIconsBold.minusSquare,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 1,
+                                horizontal: 15,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withAlpha(80),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                "${jumlah}",
+                                style: urbanist,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                stateSetter(() {
+                                  jumlah += 1;
+                                });
+                              },
+                              child: Icon(
+                                SolarIconsBold.addSquare,
+                                color: green,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
             ),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             actions: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: Theme.of(context).textTheme.labelLarge,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey.withAlpha(99),
+                  shadowColor: Colors.transparent,
                 ),
-                child: const Text('Disable'),
+                child: Text(
+                  'Batal',
+                  style: urbanist.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: Theme.of(context).textTheme.labelLarge,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: green,
                 ),
-                child: const Text('Enable'),
-                onPressed: () {
-                  Navigator.of(context).pop();
+                child: Text(
+                  'OK',
+                  style: urbanist,
+                ),
+                onPressed: () async {
+                  Loading();
+                  if (await shippingProvider.postCheckRevision(
+                    token: authProvider.user.token ?? "",
+                    noResi: noResi,
+                    noInvoice: selectedInvoice,
+                    productId: produkId,
+                    jumlah: jumlah,
+                    satuan: satuan,
+                    golongan: golongan,
+                  )) {}
                 },
               ),
             ],
@@ -344,15 +472,21 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            // revisiModalDialog(
-                            //   noResi: shippingProvider
-                            //           .detailDeliveryData?.data?.noResi ??
-                            //       "",
-                            //   namaProduk: "${product?[i].namaProduk}",
-                            //   jumlah: product?[i].jumlah ?? 0,
-                            //   satuan: product?[i].satuan ?? "",
-                            //   produkId: product?[i].
-                            // );
+                            revisiModalDialog(
+                              noResi: shippingProvider
+                                      .detailDeliveryData?.data?.noResi ??
+                                  "",
+                              namaProduk: "${product?[i].namaProduk}",
+                              jumlah: product?[i].jumlah ?? 0,
+                              satuan: product?[i].satuan ?? "",
+                              produkId: product?[i].produkId ?? 0,
+                              golongan: golongan,
+                              noInvoice: shippingProvider
+                                      .detailDeliveryData?.data?.transaksi
+                                      ?.map((e) => e.noInvoice.toString())
+                                      .toList() ??
+                                  [],
+                            );
                           },
                           child: Text("Revisi"),
                         ),

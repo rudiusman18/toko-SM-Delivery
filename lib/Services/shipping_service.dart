@@ -301,4 +301,38 @@ class ShippingService {
       throw Exception(response.body);
     }
   }
+
+  Future<Map<String, dynamic>> postCheckRevision({
+    required String token,
+    required String noResi,
+    required String noInvoice,
+    required int productId,
+    required int jumlah,
+    required String satuan,
+    required String golongan,
+  }) async {
+    var url = Uri.parse("${baseURL}pengiriman/revisi");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    Map data = {
+      "no_resi": noResi,
+      "no_invoice": noInvoice,
+      "produk_id": productId,
+      "jumlah": jumlah,
+      "satuan": satuan,
+      "golongan": golongan,
+    };
+
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    var result = jsonDecode(response.body);
+    print("isi cek revisi: ${data} dengan ${response.statusCode}");
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      return result;
+    } else {
+      throw Exception(result);
+    }
+  }
 }

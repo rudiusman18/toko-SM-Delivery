@@ -132,6 +132,7 @@ class GolData {
   String? satuan;
   int? jumlah;
   bool? checked;
+  int? produkId;
 
   GolData({this.namaProduk, this.satuan, this.jumlah, this.checked});
 
@@ -140,6 +141,7 @@ class GolData {
     satuan = json['satuan'];
     jumlah = json['jumlah'];
     checked = json['checked'];
+    produkId = json['produk_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -148,6 +150,7 @@ class GolData {
     data['satuan'] = satuan;
     data['jumlah'] = jumlah;
     data['checked'] = checked;
+    data['produk_id'] = produkId;
     return data;
   }
 }
