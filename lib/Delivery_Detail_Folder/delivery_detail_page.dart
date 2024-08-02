@@ -18,7 +18,6 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     print(widget.resiId);
@@ -216,6 +215,50 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       );
     }
 
+    Future<void> revisiModalDialog({
+      required String noResi,
+      required String noInvoice,
+      required String namaProduk,
+      required int produkId,
+      required int jumlah,
+      required String satuan,
+      required String golongan,
+    }) {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Revisi Jumlah Produk'),
+            content: Column(
+              children: [Text("")],
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Disable'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Enable'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     Widget golonganItem({
       required String golongan,
       required List<GolData>? product,
@@ -298,13 +341,28 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           style: urbanist,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text("Revisi"),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            // revisiModalDialog(
+                            //   noResi: shippingProvider
+                            //           .detailDeliveryData?.data?.noResi ??
+                            //       "",
+                            //   namaProduk: "${product?[i].namaProduk}",
+                            //   jumlah: product?[i].jumlah ?? 0,
+                            //   satuan: product?[i].satuan ?? "",
+                            //   produkId: product?[i].
+                            // );
+                          },
+                          child: Text("Revisi"),
+                        ),
                       ),
-                      Text(
-                        "${product?[i].jumlah} ${product?[i].satuan}",
-                        style: urbanist,
+                      Expanded(
+                        child: Text(
+                          "${product?[i].jumlah} ${product?[i].satuan}",
+                          style: urbanist,
+                          textAlign: TextAlign.end,
+                        ),
                       ),
                       const SizedBox(
                         width: 10,
