@@ -315,12 +315,27 @@ class _TransactionPageState extends State<TransactionPage> {
               ),
             ],
           ),
-          _selectedDate == ""
-              ? const SizedBox()
-              : Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 24,
+          if (_selectedDate != "") ...{
+            Row(
+              children: [
+                SizedBox(
+                  width: 24,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedDate = "";
+                      _getTransactionHistory();
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel,
                   ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
                   padding: const EdgeInsets.all(
                     10,
                   ),
@@ -337,6 +352,9 @@ class _TransactionPageState extends State<TransactionPage> {
                     ),
                   ),
                 ),
+              ],
+            ),
+          },
           const SizedBox(
             height: 20,
           ),

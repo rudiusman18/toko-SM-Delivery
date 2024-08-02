@@ -270,12 +270,27 @@ class _DeliveryPageState extends State<DeliveryPage> {
               ),
             ],
           ),
-          _selectedDate == ""
-              ? const SizedBox()
-              : Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 24,
+          if (_selectedDate != "") ...{
+            Row(
+              children: [
+                SizedBox(
+                  width: 24,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedDate = "";
+                      _getDeliveryHistory();
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel,
                   ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
                   padding: const EdgeInsets.all(
                     10,
                   ),
@@ -292,6 +307,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                     ),
                   ),
                 ),
+              ],
+            ),
+          },
           const SizedBox(
             height: 20,
           ),

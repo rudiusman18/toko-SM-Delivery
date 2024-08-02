@@ -378,7 +378,15 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                     jumlah: jumlah,
                     satuan: satuan,
                     golongan: golongan,
-                  )) {}
+                  )) {
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger(
+                        child: Text(
+                      "Gagal mengirim data revisi",
+                      style: urbanist,
+                    ));
+                  }
                 },
               ),
             ],
@@ -486,7 +494,9 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                                       ?.map((e) => e.noInvoice.toString())
                                       .toList() ??
                                   [],
-                            );
+                            ).then((_) {
+                              _getDetailDelivery();
+                            });
                           },
                           child: Text("Revisi"),
                         ),
