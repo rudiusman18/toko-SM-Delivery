@@ -113,12 +113,17 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                         shippingProvider.detailDeliveryData?.data?.noResi ?? "",
                   );
                 } else {
-                  await shippingProvider.postDeliveryData(
+                  // await shippingProvider.postDeliveryData(
+                  //   token: authProvider.user.token ?? "",
+                  //   noResi:
+                  //       shippingProvider.detailDeliveryData?.data?.noResi ?? "",
+                  //   status: 1,
+                  //   golongan: mapGolongan,
+                  // );
+                  await shippingProvider.postSendDelivery(
                     token: authProvider.user.token ?? "",
                     noResi:
                         shippingProvider.detailDeliveryData?.data?.noResi ?? "",
-                    status: 1,
-                    golongan: mapGolongan,
                   );
                 }
 
@@ -477,30 +482,35 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           style: urbanist,
                         ),
                       ),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {
-                            revisiModalDialog(
-                              noResi: shippingProvider
-                                      .detailDeliveryData?.data?.noResi ??
-                                  "",
-                              namaProduk: "${product?[i].namaProduk}",
-                              jumlah: product?[i].jumlah ?? 0,
-                              satuan: product?[i].satuan ?? "",
-                              produkId: product?[i].produkId ?? 0,
-                              golongan: golongan,
-                              noInvoice: shippingProvider
-                                      .detailDeliveryData?.data?.transaksi
-                                      ?.map((e) => e.noInvoice.toString())
-                                      .toList() ??
-                                  [],
-                            ).then((_) {
-                              _getDetailDelivery();
-                            });
-                          },
-                          child: Text("Revisi"),
-                        ),
-                      ),
+                      authProvider.user.data.kategori?.toLowerCase() == "kurir"
+                          ? SizedBox()
+                          : Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  revisiModalDialog(
+                                    noResi: shippingProvider
+                                            .detailDeliveryData?.data?.noResi ??
+                                        "",
+                                    namaProduk: "${product?[i].namaProduk}",
+                                    jumlah: product?[i].jumlah ?? 0,
+                                    satuan: product?[i].satuan ?? "",
+                                    produkId: product?[i].produkId ?? 0,
+                                    golongan: golongan,
+                                    noInvoice: shippingProvider
+                                            .detailDeliveryData?.data?.transaksi
+                                            ?.map((e) => e.noInvoice.toString())
+                                            .toList() ??
+                                        [],
+                                  ).then((_) {
+                                    _getDetailDelivery();
+                                  });
+                                },
+                                child: Text(
+                                  "Revisi",
+                                  style: urbanist,
+                                ),
+                              ),
+                            ),
                       Expanded(
                         child: Text(
                           "${product?[i].jumlah} ${product?[i].satuan}",
@@ -683,10 +693,17 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                             noResi: shippingProvider
                                     .detailDeliveryData?.data?.noResi ??
                                 "",
-                            status: 0,
                             golongan: mapGolongan,
                           );
-                          setState(() {});
+                          setState(() {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                'Checklist berhasil disimpan',
+                                style: urbanist,
+                              ),
+                              duration: const Duration(seconds: 1),
+                            ));
+                          });
                         },
                         child: Text(
                           "Simpan Checklist",

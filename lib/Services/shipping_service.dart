@@ -173,7 +173,6 @@ class ShippingService {
   Future<Map<String, dynamic>> postDetailDelivery({
     required String token,
     required String noResi,
-    required int status,
     required Map<String, List<bool>> golongan,
   }) async {
     var url = Uri.parse("${baseURL}pengiriman/data");
@@ -183,7 +182,6 @@ class ShippingService {
     };
     Map data = {
       'no_resi': noResi,
-      'status': status,
       'golongan': golongan,
     };
     var body = jsonEncode(data);
@@ -261,6 +259,28 @@ class ShippingService {
   Future<Map<String, dynamic>> postDoneDelivery(
       {required String token, required String noResi}) async {
     var url = Uri.parse("${baseURL}pengiriman/selesai");
+    var header = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json'
+    };
+    Map data = {
+      'no_resi': noResi,
+    };
+
+    print("isi data: ${data}");
+    var body = jsonEncode(data);
+    var response = await http.post(url, headers: header, body: body);
+    var result = jsonDecode(response.body);
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      return result;
+    } else {
+      throw Exception(result);
+    }
+  }
+
+  Future<Map<String, dynamic>> postSendDelivery(
+      {required String token, required String noResi}) async {
+    var url = Uri.parse("${baseURL}pengiriman/dikirim");
     var header = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json'

@@ -190,12 +190,11 @@ class ShippingProvider with ChangeNotifier {
   Future<bool> postDeliveryData({
     required String token,
     required String noResi,
-    required int status,
     required Map<String, List<bool>> golongan,
   }) async {
     try {
-      await ShippingService().postDetailDelivery(
-          token: token, noResi: noResi, status: status, golongan: golongan);
+      await ShippingService()
+          .postDetailDelivery(token: token, noResi: noResi, golongan: golongan);
       return true;
     } catch (e) {
       return false;
@@ -234,6 +233,19 @@ class ShippingProvider with ChangeNotifier {
       return true;
     } catch (e) {
       print("Done delivery gagal dengan pesan: $e");
+      return false;
+    }
+  }
+
+  Future<bool> postSendDelivery({
+    required String token,
+    required String noResi,
+  }) async {
+    try {
+      await ShippingService().postSendDelivery(token: token, noResi: noResi);
+      return true;
+    } catch (e) {
+      print("Send delivery gagal dengan pesan: $e");
       return false;
     }
   }
