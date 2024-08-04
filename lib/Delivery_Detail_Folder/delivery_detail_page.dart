@@ -18,7 +18,6 @@ class DeliveryDetailPage extends StatefulWidget {
 class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
   Map<String, List<bool>> mapGolongan = {};
   String selectedInvoice = "";
-  bool revisiisLoading = false;
 
   @override
   void initState() {
@@ -378,11 +377,20 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                     golongan: golongan,
                   )) {
                     Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        'Data berhasil disimpan',
+                        style: urbanist,
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ));
                   } else {
-                    ScaffoldMessenger(
-                        child: Text(
-                      "Gagal mengirim data revisi",
-                      style: urbanist,
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        'Gagal mengirim data revisi',
+                        style: urbanist,
+                      ),
+                      duration: const Duration(seconds: 1),
                     ));
                   }
                 },
@@ -455,13 +463,13 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                   setState(() {
                     if (shippingProvider.detailDeliveryData?.data?.status ==
                         0) {
-                      product[i].checked = !product[i].checked!;
-                      mapGolongan[golongan]?[i] = product[i].checked ?? false;
+                      product?[i].checked = !product[i].checked!;
+                      mapGolongan[golongan]?[i] = product?[i].checked ?? false;
 
                       print(
                           "isi mapgolongan njing: ${mapGolongan} dengan golongan $golongan");
-                      print("isi produk nya adalah: ${product[i].checked}");
-                      print("isi produk nya adalah: ${product[i].toJson()}");
+                      print("isi produk nya adalah: ${product?[i].checked}");
+                      print("isi produk nya adalah: ${product?[i].toJson()}");
                     }
                   });
                 },
@@ -511,51 +519,54 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           textAlign: TextAlign.end,
                         ),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (shippingProvider
-                                    .detailDeliveryData?.data?.status ==
-                                0) {
-                              product[i].checked = !product[i].checked!;
-                              mapGolongan[golongan]?[i] =
-                                  product[i].checked ?? false;
+                      if (authProvider.user.data.kategori?.toLowerCase() ==
+                          "checker") ...{
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (shippingProvider
+                                      .detailDeliveryData?.data?.status ==
+                                  0) {
+                                product[i].checked = !product[i].checked!;
+                                mapGolongan[golongan]?[i] =
+                                    product[i].checked ?? false;
 
-                              print("isi mapgolongan njing: ${mapGolongan}");
-                              print(
-                                  "isi produk nya adalah: ${product[i].checked}");
-                              print(
-                                  "isi produk nya adalah: ${product[i].toJson()}");
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: product![i].checked!
-                                ? green
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              width: 1,
-                              color: !product[i].checked!
-                                  ? Colors.grey
+                                print("isi mapgolongan njing: ${mapGolongan}");
+                                print(
+                                    "isi produk nya adalah: ${product[i].checked}");
+                                print(
+                                    "isi produk nya adalah: ${product[i].toJson()}");
+                              }
+                            });
+                          },
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: product![i].checked!
+                                  ? green
                                   : Colors.transparent,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                width: 1,
+                                color: !product[i].checked!
+                                    ? Colors.grey
+                                    : Colors.transparent,
+                              ),
                             ),
-                          ),
-                          child: const FittedBox(
-                            fit: BoxFit.cover,
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
+                            child: const FittedBox(
+                              fit: BoxFit.cover,
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      },
                     ],
                   ),
                 ),
