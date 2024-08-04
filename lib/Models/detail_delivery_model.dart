@@ -133,8 +133,15 @@ class GolData {
   int? jumlah;
   bool? checked;
   int? produkId;
+  List<Revisi>? revisi;
 
-  GolData({this.namaProduk, this.satuan, this.jumlah, this.checked});
+  GolData({
+    this.namaProduk,
+    this.satuan,
+    this.jumlah,
+    this.checked,
+    this.revisi,
+  });
 
   GolData.fromJson(Map<String, dynamic> json) {
     namaProduk = json['nama_produk'];
@@ -142,6 +149,12 @@ class GolData {
     jumlah = json['jumlah'];
     checked = json['checked'];
     produkId = json['produk_id'];
+    if (json['revisi'] != null) {
+      revisi = <Revisi>[];
+      json['revisi'].forEach((v) {
+        revisi!.add(new Revisi.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -151,6 +164,31 @@ class GolData {
     data['jumlah'] = jumlah;
     data['checked'] = checked;
     data['produk_id'] = produkId;
+    if (this.revisi != null) {
+      data['revisi'] = this.revisi!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Revisi {
+  String? noInvoice;
+  int? jumlah;
+  bool? confirm;
+
+  Revisi({this.noInvoice, this.jumlah, this.confirm});
+
+  Revisi.fromJson(Map<String, dynamic> json) {
+    noInvoice = json['no_invoice'];
+    jumlah = json['jumlah'];
+    confirm = json['confirm'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['no_invoice'] = this.noInvoice;
+    data['jumlah'] = this.jumlah;
+    data['confirm'] = this.confirm;
     return data;
   }
 }

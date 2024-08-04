@@ -225,6 +225,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
       required String satuan,
       required String golongan,
     }) {
+      selectedInvoice = noInvoice.first;
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -416,167 +417,219 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
 
       // }
 
-      return Container(
-        margin: const EdgeInsets.only(
-          bottom: 20,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+      return Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(
+              bottom: 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  golongan,
-                  style: urbanist.copyWith(
-                    fontSize: 18,
-                    fontWeight: semiBold,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: yellow,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    "${product?.length}",
-                    style: urbanist.copyWith(
-                      fontWeight: semiBold,
-                      color: Colors.white,
-                      fontSize: 18,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      golongan,
+                      style: urbanist.copyWith(
+                        fontSize: 18,
+                        fontWeight: semiBold,
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            for (var i = 0; i < (product?.length ?? 0); i++) ...{
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    if (shippingProvider.detailDeliveryData?.data?.status ==
-                        0) {
-                      product?[i].checked = !product[i].checked!;
-                      mapGolongan[golongan]?[i] = product?[i].checked ?? false;
-
-                      print(
-                          "isi mapgolongan njing: ${mapGolongan} dengan golongan $golongan");
-                      print("isi produk nya adalah: ${product?[i].checked}");
-                      print("isi produk nya adalah: ${product?[i].toJson()}");
-                    }
-                  });
-                },
-                child: Container(
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "${product?[i].namaProduk}",
-                          style: urbanist,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: yellow,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        "${product?.length}",
+                        style: urbanist.copyWith(
+                          fontWeight: semiBold,
+                          color: Colors.white,
+                          fontSize: 18,
                         ),
                       ),
-                      authProvider.user.data.kategori?.toLowerCase() == "kurir"
-                          ? SizedBox()
-                          : Expanded(
-                              child: TextButton(
-                                onPressed: () {
-                                  revisiModalDialog(
-                                    noResi: shippingProvider
-                                            .detailDeliveryData?.data?.noResi ??
-                                        "",
-                                    namaProduk: "${product?[i].namaProduk}",
-                                    jumlah: product?[i].jumlah ?? 0,
-                                    satuan: product?[i].satuan ?? "",
-                                    produkId: product?[i].produkId ?? 0,
-                                    golongan: golongan,
-                                    noInvoice: shippingProvider
-                                            .detailDeliveryData?.data?.transaksi
-                                            ?.map((e) => e.noInvoice.toString())
-                                            .toList() ??
-                                        [],
-                                  ).then((_) {
-                                    _getDetailDelivery();
-                                  });
-                                },
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                for (var i = 0; i < (product?.length ?? 0); i++) ...{
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (shippingProvider
+                                    .detailDeliveryData?.data?.status ==
+                                0) {
+                              product?[i].checked = !product[i].checked!;
+                              mapGolongan[golongan]?[i] =
+                                  product?[i].checked ?? false;
+
+                              print(
+                                  "isi mapgolongan njing: ${mapGolongan} dengan golongan $golongan");
+                              print(
+                                  "isi produk nya adalah: ${product?[i].checked}");
+                              print(
+                                  "isi produk nya adalah: ${product?[i].toJson()}");
+                            }
+                          });
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          child: Row(
+                            children: [
+                              Expanded(
                                 child: Text(
-                                  "Revisi",
+                                  "${product?[i].namaProduk}",
                                   style: urbanist,
                                 ),
                               ),
-                            ),
-                      Expanded(
-                        child: Text(
-                          "${product?[i].jumlah} ${product?[i].satuan}",
-                          style: urbanist,
-                          textAlign: TextAlign.end,
+                              authProvider.user.data.kategori?.toLowerCase() ==
+                                      "kurir"
+                                  ? SizedBox()
+                                  : Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          revisiModalDialog(
+                                            noResi: shippingProvider
+                                                    .detailDeliveryData
+                                                    ?.data
+                                                    ?.noResi ??
+                                                "",
+                                            namaProduk:
+                                                "${product?[i].namaProduk}",
+                                            jumlah: product?[i].jumlah ?? 0,
+                                            satuan: product?[i].satuan ?? "",
+                                            produkId: product?[i].produkId ?? 0,
+                                            golongan: golongan,
+                                            noInvoice: shippingProvider
+                                                    .detailDeliveryData
+                                                    ?.data
+                                                    ?.transaksi
+                                                    ?.map((e) =>
+                                                        e.noInvoice.toString())
+                                                    .toList() ??
+                                                [],
+                                          ).then((_) {
+                                            _getDetailDelivery();
+                                          });
+                                        },
+                                        child: Text(
+                                          "Revisi",
+                                          style: urbanist,
+                                        ),
+                                      ),
+                                    ),
+                              Expanded(
+                                child: Text(
+                                  "${product?[i].jumlah} ${product?[i].satuan}",
+                                  style: urbanist,
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              if (authProvider.user.data.kategori
+                                      ?.toLowerCase() ==
+                                  "checker") ...{
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (shippingProvider.detailDeliveryData
+                                              ?.data?.status ==
+                                          0) {
+                                        product[i].checked =
+                                            !product[i].checked!;
+                                        mapGolongan[golongan]?[i] =
+                                            product[i].checked ?? false;
+
+                                        print(
+                                            "isi mapgolongan njing: ${mapGolongan}");
+                                        print(
+                                            "isi produk nya adalah: ${product[i].checked}");
+                                        print(
+                                            "isi produk nya adalah: ${product[i].toJson()}");
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      color: product![i].checked!
+                                          ? green
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        width: 1,
+                                        color: !product[i].checked!
+                                            ? Colors.grey
+                                            : Colors.transparent,
+                                      ),
+                                    ),
+                                    child: const FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              },
+                            ],
+                          ),
                         ),
                       ),
                       if (authProvider.user.data.kategori?.toLowerCase() ==
                           "checker") ...{
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (shippingProvider
-                                      .detailDeliveryData?.data?.status ==
-                                  0) {
-                                product[i].checked = !product[i].checked!;
-                                mapGolongan[golongan]?[i] =
-                                    product[i].checked ?? false;
-
-                                print("isi mapgolongan njing: ${mapGolongan}");
-                                print(
-                                    "isi produk nya adalah: ${product[i].checked}");
-                                print(
-                                    "isi produk nya adalah: ${product[i].toJson()}");
-                              }
-                            });
-                          },
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: product![i].checked!
-                                  ? green
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                width: 1,
-                                color: !product[i].checked!
-                                    ? Colors.grey
-                                    : Colors.transparent,
-                              ),
+                        for (Revisi data in (product?[i].revisi ?? [])) ...{
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 24,
                             ),
-                            child: const FittedBox(
-                              fit: BoxFit.cover,
-                              child: Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    "Revisi\t\t\t\t\t${data.noInvoice}\t\t\t\t\t${data.jumlah} ${product?[i].satuan}\t\t\t\t\t",
+                                    style: urbanist.copyWith(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  data.confirm == true
+                                      ? SolarIconsBold.addCircle
+                                      : SolarIconsBold.minusCircle,
+                                  color: data.confirm == true ? green : yellow,
+                                  size: 20,
+                                ),
+                              ],
                             ),
                           ),
-                        ),
+                        }
                       },
+                      const SizedBox(
+                        height: 10,
+                      ),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            },
-          ],
-        ),
+                },
+              ],
+            ),
+          ),
+        ],
       );
     }
 
