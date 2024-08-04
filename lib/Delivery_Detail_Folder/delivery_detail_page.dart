@@ -488,17 +488,22 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Text(
-                                  "${product?[i].namaProduk}",
-                                  style: urbanist,
+                                flex: 4,
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 5),
+                                  child: Text(
+                                    "${product?[i].namaProduk}",
+                                    style: urbanist,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                               authProvider.user.data.kategori?.toLowerCase() ==
                                       "kurir"
                                   ? SizedBox()
                                   : Expanded(
-                                      child: TextButton(
-                                        onPressed: () {
+                                      child: InkWell(
+                                        onTap: () {
                                           revisiModalDialog(
                                             noResi: shippingProvider
                                                     .detailDeliveryData
@@ -525,7 +530,11 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                                         },
                                         child: Text(
                                           "Revisi",
-                                          style: urbanist,
+                                          style: urbanist.copyWith(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.lightBlue,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -600,7 +609,8 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                             ),
                             child: Row(
                               children: [
-                                Flexible(
+                                Expanded(
+                                  flex: 3,
                                   child: Text(
                                     "Revisi\t\t\t\t\t${data.noInvoice}\t\t\t\t\t${data.jumlah} ${product?[i].satuan}\t\t\t\t\t",
                                     style: urbanist.copyWith(
@@ -608,13 +618,17 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                                     ),
                                   ),
                                 ),
-                                Icon(
-                                  data.confirm == true
-                                      ? SolarIconsBold.addCircle
-                                      : SolarIconsBold.minusCircle,
-                                  color: data.confirm == true ? green : yellow,
-                                  size: 20,
+                                Expanded(
+                                  child: Icon(
+                                    data.confirm == true
+                                        ? SolarIconsBold.checkCircle
+                                        : SolarIconsBold.minusCircle,
+                                    color:
+                                        data.confirm == true ? green : yellow,
+                                    size: 20,
+                                  ),
                                 ),
+                                Expanded(child: SizedBox())
                               ],
                             ),
                           ),
