@@ -113,13 +113,6 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                         shippingProvider.detailDeliveryData?.data?.noResi ?? "",
                   );
                 } else {
-                  // await shippingProvider.postDeliveryData(
-                  //   token: authProvider.user.token ?? "",
-                  //   noResi:
-                  //       shippingProvider.detailDeliveryData?.data?.noResi ?? "",
-                  //   status: 1,
-                  //   golongan: mapGolongan,
-                  // );
                   await shippingProvider.postSendDelivery(
                     token: authProvider.user.token ?? "",
                     noResi:
@@ -675,8 +668,9 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
               margin: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 children: [
-                  if (shippingProvider.detailDeliveryData?.data?.status ==
-                      0) ...{
+                  if (shippingProvider.detailDeliveryData?.data?.status == 0 &&
+                      authProvider.user.data.kategori?.toLowerCase() ==
+                          "checker") ...{
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -698,7 +692,7 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                           setState(() {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                'Checklist berhasil disimpan',
+                                'Data berhasil disimpan',
                                 style: urbanist,
                               ),
                               duration: const Duration(seconds: 1),
@@ -718,8 +712,9 @@ class _DeliveryDetailPageState extends State<DeliveryDetailPage> {
                       width: 10,
                     ),
                   },
-                  if (shippingProvider.detailDeliveryData?.data?.status !=
-                      2) ...{
+                  if (shippingProvider.detailDeliveryData?.data?.status != 2 &&
+                      authProvider.user.data.kategori?.toLowerCase() ==
+                          "kurir") ...{
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
