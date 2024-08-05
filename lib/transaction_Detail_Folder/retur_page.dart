@@ -214,8 +214,7 @@ class _ReturPageState extends State<ReturPage> {
                               : 1);
                       index++) ...{
                     if ((product.golonganProduk is List) &&
-                            product.jumlahMultisatuan?[index] != null &&
-                            product.jumlahMultisatuan?[index] != 0 ||
+                            product.jumlahMultisatuan?[index] != null ||
                         (product.golonganProduk is! List)) ...{
                       const SizedBox(
                         height: 5,
