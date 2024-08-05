@@ -22,7 +22,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print("transact id : ${widget.resiId}");
 
@@ -181,7 +180,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                             ),
                             type: PageTransitionType.leftToRight,
                           ),
-                        ).then((_) => _TransactionDetailPageState());
+                        ).then((_) {
+                          setState(() {
+                            return _getDetailDelivery();
+                          });
+                        });
                       } else {
                         Navigator.pop(context);
                         Navigator.push(

@@ -68,6 +68,34 @@ class _ReturPageState extends State<ReturPage> {
                 )) {
                   // ignore: use_build_context_synchronously
                   Navigator.pop(context);
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      content: Text(
+                        'Berhasil mengajukan retur',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      content: Text(
+                        'Gagal mengajukan retur',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
                 }
               },
               child: const Text('OK'),
@@ -286,7 +314,6 @@ class _ReturPageState extends State<ReturPage> {
                           ),
                         ],
                       ),
-                    
                     },
                   },
                 ],
@@ -329,7 +356,9 @@ class _ReturPageState extends State<ReturPage> {
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       "Kembali",
                       style: urbanist.copyWith(
