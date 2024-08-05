@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
@@ -71,11 +69,6 @@ class _ReturPageState extends State<ReturPage> {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                      ),
                       content: Text(
                         'Berhasil mengajukan retur',
                         textAlign: TextAlign.center,
@@ -85,11 +78,6 @@ class _ReturPageState extends State<ReturPage> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                      ),
                       content: Text(
                         'Gagal mengajukan retur',
                         textAlign: TextAlign.center,
@@ -178,6 +166,17 @@ class _ReturPageState extends State<ReturPage> {
     Widget productItem({
       required Produk product,
     }) {
+      List<int> removeTrailingZeros(List<int> arr) {
+        while (arr.isNotEmpty && arr.last == 0) {
+          arr.removeLast();
+        }
+        return arr;
+      }
+
+      var data = removeTrailingZeros((product.jumlahMultisatuan ?? [])
+          .map((e) => int.tryParse(e.toString()) ?? 0)
+          .toList());
+
       return Container(
         margin: const EdgeInsets.only(
           bottom: 10,
@@ -209,9 +208,7 @@ class _ReturPageState extends State<ReturPage> {
                 children: [
                   for (var index = 0;
                       index <
-                          (product.golonganProduk is List
-                              ? (product.golonganProduk as List).length
-                              : 1);
+                          (product.golonganProduk is List ? (data).length : 1);
                       index++) ...{
                     if ((product.golonganProduk is List) &&
                             product.jumlahMultisatuan?[index] != null ||
@@ -475,6 +472,7 @@ class _ReturPageState extends State<ReturPage> {
                       height: 5,
                     ),
                     // NOTE: Product Item
+
                     for (Produk data in (widget.produk ?? [])) ...{
                       productItem(
                         product: data,

@@ -393,13 +393,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           ),
           if (multiSatuan.isNotEmpty && totalProduct!.isNotEmpty) ...[
             for (var i = 0; i < multiSatuan.length; i++) ...[
-              Text(
-                "${totalProduct[i]} ${multiSatuan[i]}",
-                style: urbanist.copyWith(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-              ),
+              totalProduct[i] == 0
+                  ? SizedBox()
+                  : Text(
+                      "${totalProduct[i]} ${multiSatuan[i]}",
+                      style: urbanist.copyWith(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
             ]
           ],
           const Divider(
@@ -412,93 +414,40 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     Widget content() {
       print(
           "Content Length : ${(shippingProvider.detailTransactionData?.data?.produk ?? []).length}");
-      return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-        ),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                Expanded(
-                  child: Text(
-                    "No Invoice",
-                    style: urbanist,
+      return RefreshIndicator(
+        color: green,
+        onRefresh: () async {
+          _getDetailDelivery();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+          ),
+          child: ListView(
+            physics: AlwaysScrollableScrollPhysics(),
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                ),
-                Text(
-                  "${shippingProvider.detailTransactionData?.data?.noInvoice}",
-                  style: urbanist.copyWith(
-                    color: Colors.grey,
+                  Expanded(
+                    child: Text(
+                      "No Invoice",
+                      style: urbanist,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Nama Pelanggan",
-                    style: urbanist,
+                  Text(
+                    "${shippingProvider.detailTransactionData?.data?.noInvoice}",
+                    style: urbanist.copyWith(
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-                Text(
-                  "${shippingProvider.detailTransactionData?.data?.namaPelanggan}",
-                  style: urbanist.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Total belanja",
-                    style: urbanist,
-                  ),
-                ),
-                Text(
-                  "Rp ${shippingProvider.detailTransactionData?.data?.totalBelanja}",
-                  style: urbanist.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Metode Pembayaran",
-                    style: urbanist,
-                  ),
-                ),
-                Text(
-                  "${shippingProvider.detailTransactionData?.data?.metodePembayaran == "kredit" ? "hutang" : shippingProvider.detailTransactionData?.data?.metodePembayaran}",
-                  style: urbanist.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            if (shippingProvider.detailTransactionData?.data?.retur !=
-                null) ...{
+                ],
+              ),
               const SizedBox(
                 height: 5,
               ),
@@ -506,102 +455,206 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      "Retur",
-                      style: urbanist.copyWith(
-                        color: yellow,
-                        fontWeight: bold,
-                      ),
+                      "Nama Pelanggan",
+                      style: urbanist,
                     ),
                   ),
                   Text(
-                    shippingProvider.detailTransactionData?.data?.retur == 0
-                        ? "Menunggu Konfirmasi"
-                        : "Disetujui",
+                    "${shippingProvider.detailTransactionData?.data?.namaPelanggan}",
                     style: urbanist.copyWith(
                       color: Colors.grey,
                     ),
                   ),
                 ],
               ),
-            },
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Produk",
-                  style: urbanist.copyWith(
-                    fontSize: 18,
-                    fontWeight: semiBold,
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Total belanja",
+                      style: urbanist,
+                    ),
                   ),
-                ),
+                  Text(
+                    "Rp ${shippingProvider.detailTransactionData?.data?.totalBelanja}",
+                    style: urbanist.copyWith(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Metode Pembayaran",
+                      style: urbanist,
+                    ),
+                  ),
+                  Text(
+                    "${shippingProvider.detailTransactionData?.data?.metodePembayaran == "kredit" ? "hutang" : shippingProvider.detailTransactionData?.data?.metodePembayaran}",
+                    style: urbanist.copyWith(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              if (shippingProvider.detailTransactionData?.data?.retur !=
+                  null) ...{
                 const SizedBox(
                   height: 5,
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: yellow,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    (shippingProvider
-                                .detailTransactionData?.data?.produk?.length ??
-                            0)
-                        .toString(),
+                Row(
+                  children: [
+                    Text(
+                      "Retur",
+                      style: urbanist.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        if (shippingProvider
+                                .detailTransactionData?.data?.retur ==
+                            null) {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              child: ReturPage(
+                                produk: shippingProvider
+                                    .detailTransactionData?.data?.produk,
+                              ),
+                              type: PageTransitionType.leftToRight,
+                            ),
+                          ).then((_) {
+                            setState(() {
+                              return _getDetailDelivery();
+                            });
+                          });
+                        } else {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              child: const ReturInformationPage(),
+                              type: PageTransitionType.rightToLeft,
+                            ),
+                          );
+                        }
+                      },
+                      child: Icon(
+                        SolarIconsOutline.infoCircle,
+                        size: 15,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        shippingProvider.detailTransactionData?.data?.retur == 0
+                            ? "Menunggu Konfirmasi"
+                            : "Disetujui",
+                        style: urbanist.copyWith(
+                          color: shippingProvider
+                                      .detailTransactionData?.data?.retur ==
+                                  0
+                              ? yellow
+                              : green,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
+                ),
+              },
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Produk",
                     style: urbanist.copyWith(
-                      fontWeight: semiBold,
-                      color: Colors.white,
                       fontSize: 18,
+                      fontWeight: semiBold,
                     ),
                   ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            for (var i = 0;
-                i <
-                    (shippingProvider.detailTransactionData?.data?.produk ?? [])
-                        .length;
-                i++) ...[
-              productItem(
-                productName: shippingProvider
-                    .detailTransactionData?.data?.produk![i].namaProduk
-                    .toString(),
-                price:
-                    "${shippingProvider.detailTransactionData?.data?.produk![i].totalHarga.toString()}",
-                totalProduct: (shippingProvider.detailTransactionData?.data
-                                ?.produk![i].jumlahMultisatuan ??
-                            [])
-                        .isEmpty
-                    ? [
-                        shippingProvider
-                            .detailTransactionData?.data?.produk![i].jumlah
-                      ]
-                    : shippingProvider.detailTransactionData?.data?.produk![i]
-                        .jumlahMultisatuan,
-                multiSatuan: (shippingProvider.detailTransactionData?.data
-                                ?.produk![i].multisatuanUnit ??
-                            [])
-                        .isEmpty
-                    ? [
-                        shippingProvider.detailTransactionData?.data?.produk![i]
-                            .satuanProduk
-                      ]
-                    : shippingProvider.detailTransactionData?.data?.produk![i]
-                            .multisatuanUnit ??
-                        [],
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: yellow,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      (shippingProvider.detailTransactionData?.data?.produk
+                                  ?.length ??
+                              0)
+                          .toString(),
+                      style: urbanist.copyWith(
+                        fontWeight: semiBold,
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  )
+                ],
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              for (var i = 0;
+                  i <
+                      (shippingProvider.detailTransactionData?.data?.produk ??
+                              [])
+                          .length;
+                  i++) ...[
+                productItem(
+                  productName: shippingProvider
+                      .detailTransactionData?.data?.produk![i].namaProduk
+                      .toString(),
+                  price:
+                      "${shippingProvider.detailTransactionData?.data?.produk![i].totalHarga.toString()}",
+                  totalProduct: (shippingProvider.detailTransactionData?.data
+                                  ?.produk![i].jumlahMultisatuan ??
+                              [])
+                          .isEmpty
+                      ? [
+                          shippingProvider
+                              .detailTransactionData?.data?.produk![i].jumlah
+                        ]
+                      : shippingProvider.detailTransactionData?.data?.produk![i]
+                          .jumlahMultisatuan,
+                  multiSatuan: (shippingProvider.detailTransactionData?.data
+                                  ?.produk![i].multisatuanUnit ??
+                              [])
+                          .isEmpty
+                      ? [
+                          shippingProvider.detailTransactionData?.data
+                              ?.produk![i].satuanProduk
+                        ]
+                      : shippingProvider.detailTransactionData?.data?.produk![i]
+                              .multisatuanUnit ??
+                          [],
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       );
     }

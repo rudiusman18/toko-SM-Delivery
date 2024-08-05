@@ -237,20 +237,23 @@ class ShippingService {
               (int.tryParse("${product.multisatuanJumlah?[i]}") ?? 0);
         }
       }
-
-      products.add({
-        "id": "${product.sId}",
-        "produk_id": "${product.produkId}",
-        "nama_produk": "${product.namaProduk}",
-        "jumlah": (int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
-            ? int.tryParse(("${product.returValue?[0]}"))
-            : int.tryParse("$sum"),
-        "harga": "${product.harga}",
-        "satuan_produk": "${product.satuanProduk}",
-        "jumlah_multisatuan":
-            (product.returValue?.length ?? 0) > 1 ? product.returValue : null,
-        "multisatuan_unit": product.multisatuanUnit,
-      });
+      if ((int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
+          ? int.tryParse(("${product.returValue?[0]}")) != 0
+          : int.tryParse("$sum") != 0) {
+        products.add({
+          "id": "${product.sId}",
+          "produk_id": "${product.produkId}",
+          "nama_produk": "${product.namaProduk}",
+          "jumlah": (int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
+              ? int.tryParse(("${product.returValue?[0]}"))
+              : int.tryParse("$sum"),
+          "harga": "${product.harga}",
+          "satuan_produk": "${product.satuanProduk}",
+          "jumlah_multisatuan":
+              (product.returValue?.length ?? 0) > 1 ? product.returValue : null,
+          "multisatuan_unit": product.multisatuanUnit,
+        });
+      }
     }
 
     return products;

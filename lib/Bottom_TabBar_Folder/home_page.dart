@@ -116,6 +116,9 @@ class _HomePageState extends State<HomePage> {
     BottomTabbarProvider bottomTabbarProvider =
         Provider.of<BottomTabbarProvider>(context);
 
+    BottomTabbarProvider bottomNavbarProvider =
+        Provider.of<BottomTabbarProvider>(context);
+
     ShippingProvider shippingProvider = Provider.of<ShippingProvider>(context);
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
@@ -328,37 +331,47 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withAlpha(95),
-                          blurRadius: 10,
-                          offset: const Offset(0, 0), // Shadow position
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Pengiriman",
-                          style: urbanist.copyWith(
-                            fontSize: 16,
+                  child: InkWell(
+                    onTap: () {
+                      bottomNavbarProvider.selectedIndex = 1;
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: BottomTabbar(),
+                              type: PageTransitionType.fade));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withAlpha(95),
+                            blurRadius: 10,
+                            offset: const Offset(0, 0), // Shadow position
                           ),
-                        ),
-                        Text(
-                          selesaPengirimanValue,
-                          style: urbanist.copyWith(
-                            fontSize: 72,
-                            color: green,
-                            fontWeight: bold,
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pengiriman",
+                            style: urbanist.copyWith(
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            selesaPengirimanValue,
+                            style: urbanist.copyWith(
+                              fontSize: 72,
+                              color: green,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -366,37 +379,47 @@ class _HomePageState extends State<HomePage> {
                   width: 10,
                 ),
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withAlpha(95),
-                          blurRadius: 10,
-                          offset: const Offset(0, 0), // Shadow position
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Transaksi",
-                          style: urbanist.copyWith(
-                            fontSize: 16,
+                  child: InkWell(
+                    onTap: () {
+                      bottomNavbarProvider.selectedIndex = 2;
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: BottomTabbar(),
+                              type: PageTransitionType.fade));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withAlpha(95),
+                            blurRadius: 10,
+                            offset: const Offset(0, 0), // Shadow position
                           ),
-                        ),
-                        Text(
-                          selesaiTransaksiValue,
-                          style: urbanist.copyWith(
-                            fontSize: 72,
-                            color: green,
-                            fontWeight: bold,
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Transaksi",
+                            style: urbanist.copyWith(
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            selesaiTransaksiValue,
+                            style: urbanist.copyWith(
+                              fontSize: 72,
+                              color: green,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -408,51 +431,61 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: yellow,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withAlpha(95),
-                          blurRadius: 10,
-                          offset: const Offset(0, 0), // Shadow position
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Pengiriman",
-                              style: urbanist.copyWith(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          prosesPengirimanValue,
-                          style: urbanist.copyWith(
-                            fontSize: 72,
-                            color: Colors.white,
-                            fontWeight: bold,
+                  child: InkWell(
+                    onTap: () {
+                      bottomNavbarProvider.selectedIndex = 1;
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: BottomTabbar(),
+                              type: PageTransitionType.fade));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: yellow,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withAlpha(95),
+                            blurRadius: 10,
+                            offset: const Offset(0, 0), // Shadow position
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Pengiriman",
+                                style: urbanist.copyWith(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            prosesPengirimanValue,
+                            style: urbanist.copyWith(
+                              fontSize: 72,
+                              color: Colors.white,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -460,51 +493,61 @@ class _HomePageState extends State<HomePage> {
                   width: 10,
                 ),
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: yellow,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withAlpha(95),
-                          blurRadius: 10,
-                          offset: const Offset(0, 0), // Shadow position
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Transaksi",
-                              style: urbanist.copyWith(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          prossesTransaksiValue,
-                          style: urbanist.copyWith(
-                            fontSize: 72,
-                            color: Colors.white,
-                            fontWeight: bold,
+                  child: InkWell(
+                    onTap: () {
+                      bottomNavbarProvider.selectedIndex = 2;
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: BottomTabbar(),
+                              type: PageTransitionType.fade));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: yellow,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withAlpha(95),
+                            blurRadius: 10,
+                            offset: const Offset(0, 0), // Shadow position
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Transaksi",
+                                style: urbanist.copyWith(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            prossesTransaksiValue,
+                            style: urbanist.copyWith(
+                              fontSize: 72,
+                              color: Colors.white,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
