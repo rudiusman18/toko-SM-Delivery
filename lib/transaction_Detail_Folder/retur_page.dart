@@ -303,7 +303,8 @@ class _ReturPageState extends State<ReturPage> {
                           ),
                           Expanded(
                             child: Text(
-                              "${(product.jumlahMultisatuan?[index] ?? "")} (isi ${(product.golonganProduk is List) ? (product.jumlahMultisatuan?[index]) * int.tryParse("${(product.multisatuanJumlah?[index])}") ?? 0 : product.jumlah})",
+                              //  (product.jumlahMultisatuan?[index]) *
+                              "${(product.jumlahMultisatuan?[index] ?? "")} (isi ${(product.golonganProduk is List) ? int.tryParse("${(product.multisatuanJumlah?[index])}") ?? 0 : product.jumlah})",
                               style: urbanist,
                               textAlign: TextAlign.right,
                             ),

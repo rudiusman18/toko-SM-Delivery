@@ -232,14 +232,16 @@ class ShippingService {
     int sum = 0;
     for (Produk product in initProducts) {
       if (product.golonganProduk is List) {
+        sum = 0;
         for (int i = 0; i < (product.golonganProduk.length ?? 0); i++) {
           sum += (int.tryParse("${product.returValue?[i]}") ?? 0) *
               (int.tryParse("${product.multisatuanJumlah?[i]}") ?? 0);
         }
       }
-      if ((int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
-          ? int.tryParse(("${product.returValue?[0]}")) != 0
-          : int.tryParse("$sum") != 0) {
+      //((int.tryParse(("${product.returValue?.length ?? 0}"))) == 1
+      // ? int.tryParse(("${product.returValue?[0]}")) != 0
+      // : int.tryParse("$sum") != 0)
+      if (sum != 0) {
         products.add({
           "id": "${product.sId}",
           "produk_id": "${product.produkId}",
