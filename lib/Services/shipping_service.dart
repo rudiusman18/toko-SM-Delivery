@@ -9,7 +9,7 @@ import 'package:toko_sm_delivery/Models/success_model.dart';
 import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
 
 class ShippingService {
-  String baseURL = 'http://103.127.132.116/api/v1/';
+  String baseURL = 'http://10.10.10.98:3001/api/v1/';
 
   Future<ShippingStateModel> getStateDataByTime(
       {required String time, required String token}) async {

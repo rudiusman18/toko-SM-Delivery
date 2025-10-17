@@ -479,7 +479,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     ),
                   ),
                   Text(
-                    "Rp ${shippingProvider.detailTransactionData?.data?.totalBelanja}",
+                    "Rp ${shippingProvider.detailTransactionData?.data?.total}",
                     style: urbanist.copyWith(
                       color: Colors.grey,
                     ),

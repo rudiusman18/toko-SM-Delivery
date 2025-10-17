@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:toko_sm_delivery/Models/user_model.dart';
 
 class AuthService {
-  String baseURL = 'http://103.127.132.116/api/v1/';
+  String baseURL = 'http://10.10.10.98:3001/api/v1/';
 
   Future<UserModel> kurirLogin(
       {required String email, required String password}) async {

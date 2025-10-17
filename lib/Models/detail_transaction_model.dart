@@ -33,7 +33,7 @@ class Data {
   String? namaKurir;
   int? totalHarga;
   int? totalOngkosKirim;
-  int? totalBelanja;
+  int? total;
   String? metodePembayaran;
   String? namaPenerima;
   String? alamatPenerima;
@@ -58,7 +58,7 @@ class Data {
       this.namaKurir,
       this.totalHarga,
       this.totalOngkosKirim,
-      this.totalBelanja,
+      this.total,
       this.metodePembayaran,
       this.namaPenerima,
       this.alamatPenerima,
@@ -83,7 +83,7 @@ class Data {
     namaKurir = json['nama_kurir'];
     totalHarga = json['total_harga'];
     totalOngkosKirim = json['total_ongkos_kirim'];
-    totalBelanja = json['total_belanja'];
+    total = json['total'];
     metodePembayaran = json['metode_pembayaran'];
     namaPenerima = json['nama_penerima'];
     alamatPenerima = json['alamat_penerima'];
@@ -115,7 +115,7 @@ class Data {
     data['nama_kurir'] = namaKurir;
     data['total_harga'] = totalHarga;
     data['total_ongkos_kirim'] = totalOngkosKirim;
-    data['total_belanja'] = totalBelanja;
+    data['total'] = total;
     data['metode_pembayaran'] = metodePembayaran;
     data['nama_penerima'] = namaPenerima;
     data['alamat_penerima'] = alamatPenerima;
