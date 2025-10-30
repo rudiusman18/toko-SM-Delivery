@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
-import 'package:toko_sm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
-import 'package:toko_sm_delivery/Bottom_TabBar_Folder/home_page.dart';
-import 'package:toko_sm_delivery/Bottom_TabBar_Folder/transaction_page.dart';
-import 'package:toko_sm_delivery/Providers/auth_provider.dart';
-import 'package:toko_sm_delivery/Providers/bottom_tabbar_provider.dart';
-import 'package:toko_sm_delivery/Utils/theme.dart';
+import 'package:tokosm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
+import 'package:tokosm_delivery/Bottom_TabBar_Folder/home_page.dart';
+import 'package:tokosm_delivery/Bottom_TabBar_Folder/transaction_page.dart';
+import 'package:tokosm_delivery/Providers/auth_provider.dart';
+import 'package:tokosm_delivery/Providers/bottom_tabbar_provider.dart';
+import 'package:tokosm_delivery/Utils/theme.dart';
 
 class BottomTabbar extends StatefulWidget {
   const BottomTabbar({super.key});

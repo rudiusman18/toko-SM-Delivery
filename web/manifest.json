@@ -1,6 +1,6 @@
 {
-    "name": "toko_sm_delivery",
-    "short_name": "toko_sm_delivery",
+    "name": "tokosm_delivery",
+    "short_name": "tokosm_delivery",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

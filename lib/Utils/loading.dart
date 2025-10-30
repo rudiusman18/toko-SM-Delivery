@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toko_sm_delivery/Utils/theme.dart';
+import 'package:tokosm_delivery/Utils/theme.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key});

@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:toko_sm_delivery/Models/delivery_data_model.dart';
-import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
-import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
-import 'package:toko_sm_delivery/Models/retur_information_model.dart';
-import 'package:toko_sm_delivery/Models/shipping_state_model.dart';
-import 'package:toko_sm_delivery/Models/success_model.dart';
-import 'package:toko_sm_delivery/Models/transaction_data_model.dart';
+import 'package:tokosm_delivery/Models/delivery_data_model.dart';
+import 'package:tokosm_delivery/Models/detail_delivery_model.dart';
+import 'package:tokosm_delivery/Models/detail_transaction_model.dart';
+import 'package:tokosm_delivery/Models/retur_information_model.dart';
+import 'package:tokosm_delivery/Models/shipping_state_model.dart';
+import 'package:tokosm_delivery/Models/success_model.dart';
+import 'package:tokosm_delivery/Models/transaction_data_model.dart';
 
 class ShippingService {
   String baseURL = 'http://10.10.10.98:3001/api/v1/';

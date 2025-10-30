@@ -3,10 +3,10 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solar_icons/solar_icons.dart';
-import 'package:toko_sm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
-import 'package:toko_sm_delivery/Providers/auth_provider.dart';
-import 'package:toko_sm_delivery/Utils/theme.dart';
-import 'package:toko_sm_delivery/bottom_tabbar.dart';
+import 'package:tokosm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
+import 'package:tokosm_delivery/Providers/auth_provider.dart';
+import 'package:tokosm_delivery/Utils/theme.dart';
+import 'package:tokosm_delivery/bottom_tabbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

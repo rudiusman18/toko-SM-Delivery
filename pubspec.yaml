@@ -1,4 +1,4 @@
-name: toko_sm_delivery
+name: tokosm_delivery
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -34,18 +34,18 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_fonts: 6.1.0
+  google_fonts: ^6.3.2
   provider: ^6.1.2
   http: ^1.1.0
   solar_icons: ^0.0.5
   page_transition: ^2.1.0
-  syncfusion_flutter_sliders: 23.2.4
-  syncfusion_flutter_datepicker: 23.2.4
-  flutter_localization: ^0.2.0
+  syncfusion_flutter_sliders:
+  syncfusion_flutter_datepicker:
+  flutter_localization: ^0.3.3
   flutter_localizations:
     sdk: flutter
   shared_preferences: ^2.2.3
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:

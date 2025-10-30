@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solar_icons/solar_icons.dart';
-import 'package:toko_sm_delivery/Models/detail_delivery_model.dart';
-import 'package:toko_sm_delivery/Providers/auth_provider.dart';
-import 'package:toko_sm_delivery/Providers/shipping_state_provider.dart';
-import 'package:toko_sm_delivery/Utils/loading.dart';
-import 'package:toko_sm_delivery/Utils/theme.dart';
+import 'package:tokosm_delivery/Models/detail_delivery_model.dart';
+import 'package:tokosm_delivery/Providers/auth_provider.dart';
+import 'package:tokosm_delivery/Providers/shipping_state_provider.dart';
+import 'package:tokosm_delivery/Utils/loading.dart';
+import 'package:tokosm_delivery/Utils/theme.dart';
 
 class DeliveryDetailPage extends StatefulWidget {
   final String resiId;

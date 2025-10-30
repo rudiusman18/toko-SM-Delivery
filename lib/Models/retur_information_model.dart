@@ -1,5 +1,5 @@
 // lib/models/retur_information_model.dart
-import 'package:toko_sm_delivery/Models/detail_transaction_model.dart';
+import 'package:tokosm_delivery/Models/detail_transaction_model.dart';
 
 class ReturInformationModel {
   String? message;

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:toko_sm_delivery/Models/user_model.dart';
+import 'package:tokosm_delivery/Models/user_model.dart';
 
 class AuthService {
   String baseURL = 'http://10.10.10.98:3001/api/v1/';

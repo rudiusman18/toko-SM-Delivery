@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toko_sm_delivery/Models/user_model.dart';
-import 'package:toko_sm_delivery/Services/auth_service.dart';
+import 'package:tokosm_delivery/Models/user_model.dart';
+import 'package:tokosm_delivery/Services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
   // Login Model

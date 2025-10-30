@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import 'package:toko_sm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
-import 'package:toko_sm_delivery/Providers/auth_provider.dart';
-import 'package:toko_sm_delivery/Utils/theme.dart';
-import 'package:toko_sm_delivery/bottom_tabbar.dart';
-import 'package:toko_sm_delivery/login_page.dart';
+import 'package:tokosm_delivery/Bottom_TabBar_Folder/delivery_page.dart';
+import 'package:tokosm_delivery/Providers/auth_provider.dart';
+import 'package:tokosm_delivery/Utils/theme.dart';
+import 'package:tokosm_delivery/bottom_tabbar.dart';
+import 'package:tokosm_delivery/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
